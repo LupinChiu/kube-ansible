@@ -1,0 +1,40 @@
+ansible_ssh_port=57522
+ansible_ssh_private_key_file=/Ansible/keys/unicorn_kubernetes_key
+ansible_ssh_user=root
+
+k8s-m1      ansible_ssh_host=150.109.117.19
+k8s-m2      ansible_ssh_host=150.109.117.19
+k8s-n1      ansible_ssh_host=150.109.117.19
+k8s-n2      ansible_ssh_host=150.109.117.19
+k8s-n3      ansible_ssh_host=150.109.117.19
+
+[etcds]
+k8s-m1
+k8s-m2
+
+; [etcds:vars]
+; ansible_ssh_port=57522
+; ansible_ssh_private_key_file=/Ansible/keys/unicorn_kubernetes_key
+; ansible_ssh_user=root
+
+[masters]
+k8s-m1
+k8s-m2
+
+; [masters:vars]
+; ansible_ssh_port=57522
+; ansible_ssh_private_key_file=/Ansible/keys/unicorn_kubernetes_key
+; ansible_ssh_user=root
+
+[nodes]
+k8s-n1
+k8s-n2
+
+; [nodes:vars]
+; ansible_ssh_port=57522
+; ansible_ssh_private_key_file=/Ansible/keys/unicorn_kubernetes_key
+; ansible_ssh_user=root
+
+[kube-cluster:children]
+masters
+nodes
