@@ -3,6 +3,8 @@
 - name: Ensure Kubernetes PKI directory already exists
   file: path={{ pki_dir }} state=directory
 
+  # 在這裡需新增 已認證完成的 ca 憑證，避免建立出全 自簽 憑證體系(未)
+
 - name: Check Kubernetes SSL certificate json files
   stat:
     path: "{{ pki_dir }}/{{ item.bare }}.pem"
@@ -28,6 +30,7 @@
   run_once: true
   register: gen_json_files
 
+  # 在這之前需將 中繼憑證 copy 到對應位置的 ca.pem 避免下一步產生新的憑證
 - name: Check Kubernetes SSL certificate authority files
   stat:
     path: "{{ pki_dir }}/{{ item.bare }}.pem"

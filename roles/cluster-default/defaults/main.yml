@@ -66,7 +66,7 @@ kubeproxy_ipvs_scheduler: rr
 ###############
 # Docker opts #
 ###############
-
+# 這裡需要將私有docker registry 的資訊填入(未)
 # A list of the insecure registry you might need to define
 # insecure_registries:
 # - "192.168.2.9:5000"

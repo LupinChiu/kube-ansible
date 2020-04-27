@@ -1,5 +1,5 @@
 ---
-
+# 需要考慮將這裡的所有版號全搬到 group_vars 底下做記錄(未)
 base:
   kubelet:
     url: "https://storage.googleapis.com"

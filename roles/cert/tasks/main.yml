@@ -23,4 +23,7 @@
 
 - include_tasks: create-etcd-certs.yml
 
+# 這裡是刪除所有 .csr 及憑證設定檔 .json 若要長久使用同一憑證，這裡就不太適合刪除
+# cert_info_expiry 的設定值為 87600h = 10 年
+# 是否需要考慮改為 2160h = 3 月，並且定期加簽？
 - include_tasks: purge-files.yml
