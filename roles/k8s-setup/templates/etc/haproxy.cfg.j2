@@ -8,8 +8,8 @@ defaults
   mode http
   option dontlognull
   timeout connect 5000ms
-  timeout client 1800000ms
-  timeout server 1800000ms
+  timeout client 60000ms
+  timeout server 60000ms
 
 listen stats
     bind :{{ haproxy_stats_bind_address }}

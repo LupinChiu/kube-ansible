@@ -115,6 +115,46 @@ masters
 nodes
 ```
 
+* 要記得改以下的設定檔：
+```
+vip_address -> Keepalived virtual ip (在這裡主要是用在 ha kubernetes api server)
+vip_interface -> virtual ip 網卡設定 example: eth0/eth1.....
+encryption_token -> 已修改
+
+  inventory/group_vars/all.yml
+  inventory/hosts.ini.lupin-example 修改完後請存成 hosts.ini
+  roles/downloads/package/defaults/main.yml
+  roles/cluster-defaults/defaults/main.yml
+  roles/k8s-setup/defaults/main.yml
+    1. keepalived_password
+    1. keepalived_priority  將 master 權限由 100 => 200 
+    (查了一下keepalived裡 master 的設定應該是要比較高的值才對，原本是第一台設為 100，代表一開始的 api server 希望不是由第一台任職)
+    1. haproxy_stats_user
+    1. haproxy_stats_password
+```
+
+* 憑證相關需在執行前處理完成(未)
+  1. 需提前瞭解及使用 cfssl 簽出 中繼憑證 並進行相關測試
+  1. 使用提前簽出的 中繼憑證 替換Ansible內部的 ca 憑證
+  1. 改寫對應 roles/cert 內容
+
+* 其他注意事項
+  1. Kubernetes Audit 主要目的為記錄 kubernetes 的各種運行記錄，正式上線前需要詳細調整
+  1. 此 ansible 設定可能使用 fluentd 來將 Audit 的日志記錄 存在磁碟上 -- 後續需追查
+  1. --audit-log-path 設定記錄檔，看到這個設定，判斷他是存在 api server 的 pod 上
+  1. 此Ansible 在 kubernetes Api server內的設定檔有將 /etc/ssl/certs 映射至本機一樣的位置
+  1. featureGates - PodPriority 參數經追查 PodPriority 已在 1.14 版本穩定化，不需要額外設定了
+  1. featureGates - DevicePlugins 參數從 1.10 版本開始進入 Beta ，仍然未 穩定化
+  1. 10-kubelet.conf.j2 內部參數追查有如下限制：
+     1. 在 1.18 仍然為 alpha 的參數如下：
+        1. --network-plugin    # 限制 cri 為 docker 時使用
+        2. --cni-conf-dir      # 限制 cri 為 docker 時使用
+        3. --cni-bin-dir       # 限制 cri 為 docker 時使用
+        4. --node-labels       # 在 1.15 版之後 此參數規則有變，無法支援 node-role.kubernetes.io/master 該命名規則
+           1. 修正如下：--node-labels=node.kubernetes.io/lupin=''
+     2. 已完全消失參數
+     3. --allow-privileged
+
 Set the variables in `group_vars/all.yml` to reflect you need options. For example:
 ```yml
 # overide kubernetes version(default: 1.10.6)

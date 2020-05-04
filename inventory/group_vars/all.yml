@@ -1,6 +1,6 @@
 ---
 # 需調整版本(未)
-kube_version: 1.14.3
+kube_version: 1.18.0
 
 # Container runtime,
 # Supported: docker, nvidia-docker, containerd.

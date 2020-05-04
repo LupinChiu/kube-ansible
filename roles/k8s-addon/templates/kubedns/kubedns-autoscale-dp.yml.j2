@@ -20,7 +20,7 @@ spec:
     spec:
       serviceAccountName: kube-dns-autoscaler
       tolerations:
-      - key: node-role.kubernetes.io/master
+      - key: node.kubernetes.io/lupin
         effect: NoSchedule
       - key: "CriticalAddonsOnly"
         operator: "Exists"

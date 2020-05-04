@@ -1,4 +1,5 @@
 ---
+# 需調整預設值(未)
 
 ###################
 # Kubernetes opts #
@@ -43,7 +44,7 @@ bootstrap_token_secret: "18fac0a6405e8e15"
 bootstrap_token: "{{ bootstrap_token_id }}.{{ bootstrap_token_secret }}"
 
 # Kubernetes secret encryption
-encryption_token: iTNwwjHuxNI9+8niwh8GJKT5NQiHFqcOTrrhzYfhAvk=
+encryption_token: 542o6KeS5424IC0gTHVwaW4K
 
 # Kubernetes extra addons
 enable_ingress: false

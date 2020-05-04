@@ -4,11 +4,8 @@
   raw: "nvidia-smi"
   ignore_errors: True
   register: check_driver
-# 暫時將containerd 的這個 task 移至有條件的執行，看完之後覺的docker 不需要這個東西
-# - include_tasks: containerd/main.yml
-# containerd runtime
-- when: container_runtime != 'docker'
-  include_tasks: containerd/main.yml
+
+- include_tasks: containerd/main.yml
 
 # nvidia-docker runtime
 - when:

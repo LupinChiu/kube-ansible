@@ -57,7 +57,7 @@
 - name: Set taint to effect NoSchedule
   command: |
     {{ bin_dir }}/kubectl --kubeconfig={{ admin_kubeconfig }} \
-      taint nodes {{ ansible_hostname }} node-role.kubernetes.io/master="":NoSchedule --overwrite
+      taint nodes {{ ansible_hostname }} node.kubernetes.io/lupin="":NoSchedule --overwrite
   register: set_taint
   until: set_taint.rc == 0
   retries: 10
