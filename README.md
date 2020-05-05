@@ -154,6 +154,11 @@ encryption_token -> 已修改
            1. 修正如下：--node-labels=node.kubernetes.io/lupin=''
      2. 已完全消失參數
      3. --allow-privileged
+  1. 由於此 Ansible dns 解析方式採用 kubedns 需考慮改用 coredns 以利後續佈署至雲端正式集群 (未)
+     1. 原因： coredns 別人的測試報告指出 coredns解析 外部域名 的時間約比 kubedns 快上三倍(12ms vs 41ms)，且 coredns 比 kubedns 更加靈活
+     2. 雖不見得未來會需要使用外部域名的服務，保險起見還是先當成會使用
+     3. https://github.com/kubernetes/kubernetes/tree/master/cluster/addons/dns/coredns
+  1. 需將 kubernetes 設定改為優先取用私人 docker repo
 
 Set the variables in `group_vars/all.yml` to reflect you need options. For example:
 ```yml
