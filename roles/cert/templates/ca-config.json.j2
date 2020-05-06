@@ -7,10 +7,47 @@
       "{{ cert_info_profile }}": {
         "usages": [
           "signing",
+          "digital signature",
           "key encipherment",
+          "data encipherment",
           "server auth",
           "client auth"
         ],
+        "expiry": "{{ cert_info_expiry }}"
+      },
+      "intermediate-ca": {
+        "usages": [
+          "signing",
+          "cert sign",
+          "crl sign",
+          "digital signature",
+          "key encipherment",
+          "data encipherment",
+          "server auth",
+          "client auth"
+        ],
+        "ca_constraint": {
+          "is_ca": true,
+          "max_path_len": 3
+        },
+        "expiry": "{{ cert_info_expiry }}"
+      },
+      "intermediate-ca-EndPath": {
+        "usages": [
+          "signing",
+          "cert sign",
+          "crl sign",
+          "digital signature",
+          "key encipherment",
+          "data encipherment",
+          "server auth",
+          "client auth"
+        ],
+        "ca_constraint": {
+          "is_ca": true,
+          "max_path_len": 0,
+          "max_path_len_zero": true
+        },
         "expiry": "{{ cert_info_expiry }}"
       }
     }

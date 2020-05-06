@@ -1,0 +1,37 @@
+{
+    "signing": {
+        "default": {
+            "expiry": "87600h"
+        },
+        "profiles": {
+            "kubernetes": {
+                "usages": [
+                    "signing",
+                    "digital signature",
+                    "key encipherment",
+                    "data encipherment",
+                    "server auth",
+                    "client auth"
+                ],
+                "expiry": "87600h"
+            },
+            "intermediate-ca": {
+                "usages": [
+                    "signing",
+                    "cert sign",
+                    "crl sign",
+                    "digital signature",
+                    "key encipherment",
+                    "data encipherment",
+                    "server auth",
+                    "client auth"
+                ],
+                "ca_constraint": {
+                    "is_ca": true,
+                    "max_path_len": 1
+                },
+                "expiry": "87600h"
+            }
+        }
+    }
+}

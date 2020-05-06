@@ -1,0 +1,7 @@
+[ intermediate_ca ]
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid:always,issuer
+basicConstraints = CA:true, pathlen:8
+keyUsage = digitalSignature, keyEncipherment, keyCertSign, cRLSign
+extendedKeyUsage = serverAuth, clientAuth
+

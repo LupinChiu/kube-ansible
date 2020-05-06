@@ -55,7 +55,10 @@ libnvidia_lib_dir: /usr/local/lib/libnvidia
 ca_config: "{{ cache_dir }}/ca-config.json"
 pki_dir: /etc/kubernetes/pki
 etcd_pki_dir: "{{ pki_dir }}/etcd"
+intermediate_dir: "{{ pki_dir }}/intermediate"
 
+intermediate_ca: "{{ intermediate_dir }}/IM-CA.pem"
+intermediate_ca_key: "{{ intermediate_dir }}/IM-CA-key.pem"
 ca: "{{ pki_dir }}/ca.pem"
 ca_key: "{{ pki_dir }}/ca-key.pem"
 etcd_ca: "{{ etcd_pki_dir }}/etcd-ca.pem"

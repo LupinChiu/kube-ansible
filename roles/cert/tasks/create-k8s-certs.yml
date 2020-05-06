@@ -30,7 +30,6 @@
   run_once: true
   register: gen_json_files
 
-  # 在這之前需將 中繼憑證 copy 到對應位置的 ca.pem 避免下一步產生新的憑證
 - name: Check Kubernetes SSL certificate authority files
   stat:
     path: "{{ pki_dir }}/{{ item.bare }}.pem"
@@ -41,15 +40,46 @@
   run_once: true
   register: check_ca_files
 
+# 利用 中繼憑證 加簽 ca
+- name: Ensure InterMediate PKI directory already exists
+  when: not check_ca_files['results'][0].stat.exists
+  file: path={{ intermediate_dir }} state=directory
+
+- name: Copy InterMediate SSL certificate files
+  when: not check_ca_files['results'][0].stat.exists
+  template:
+    src: "{{ item.file }}"
+    dest: "{{ intermediate_dir }}/{{ item.bare }}.pem"
+  with_items: 
+    - { file: K8S-IM-CA.pem, bare: IM-CA}
+    - { file: K8S-IM-CA-key.pem, bare: IM-CA-key}
+  delegate_to: "{{ groups['masters'][0] }}"
+  run_once: true
+
 - name: Create Kubernetes SSL certificate authority files
   when: check_ca_files and not item.stat.exists
   shell: |
-    {{ bin_dir }}/cfssl gencert -initca {{ pki_dir }}/{{ item.item.file }} | \
+    {{ bin_dir }}/cfssl gencert \
+    -ca={{ intermediate_ca }} \
+    -ca-key={{ intermediate_ca_key }} \
+    -config={{ ca_config }} \
+    -profile=intermediate-ca \
+    {{ pki_dir }}/{{ item.item.file }} | \
       {{ bin_dir }}/cfssljson -bare {{ pki_dir }}/{{ item.item.bare }}
   with_items: "{{ check_ca_files['results'] }}"
   delegate_to: "{{ groups['masters'][0] }}"
   run_once: true
   register: create_ca_files
+
+# - name: Create Kubernetes SSL certificate authority files
+#   when: check_ca_files and not item.stat.exists
+#   shell: |
+#     {{ bin_dir }}/cfssl gencert -initca {{ pki_dir }}/{{ item.item.file }} | \
+#       {{ bin_dir }}/cfssljson -bare {{ pki_dir }}/{{ item.item.bare }}
+#   with_items: "{{ check_ca_files['results'] }}"
+#   delegate_to: "{{ groups['masters'][0] }}"
+#   run_once: true
+#   register: create_ca_files
 
 - name: Check Kubernetes SSL certificate key files
   stat:
