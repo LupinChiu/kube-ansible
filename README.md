@@ -133,10 +133,10 @@ encryption_token -> 已修改
     1. haproxy_stats_password
 ```
 
-* 憑證相關需在執行前處理完成(未)
+* 憑證相關需在執行前處理完成
   1. 需提前瞭解及使用 cfssl 簽出 中繼憑證 並進行相關測試
-  1. 使用提前簽出的 中繼憑證 替換Ansible內部的 ca 憑證
-  1. 改寫對應 roles/cert 內容
+  1. 使用提前簽出的 中繼憑證 替換Ansible內部的 ca 憑證 (不需要，已修改對應 yml 檔)
+  1. 改寫對應 roles/cert 內容 (已進行相關修改)
 
 * 其他注意事項
   1. Kubernetes Audit 主要目的為記錄 kubernetes 的各種運行記錄，正式上線前需要詳細調整

@@ -1,5 +1,5 @@
 ---
-# 需調整版本(未)
+# 需調整版本
 kube_version: 1.18.0
 
 # Container runtime,
@@ -11,7 +11,7 @@ container_runtime: docker
 cni_enable: true
 container_network: calico
 
-# 需調整vip ip - vip 指的是 Ansible 控制機 (未)
+# 需調整vip ip - vip 指的是 api server 統一對外ip(未)
 # Kubernetes HA extra variables.
 vip_interface: ""
 vip_address: 172.16.35.9
