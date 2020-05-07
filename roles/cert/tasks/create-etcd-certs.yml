@@ -36,12 +36,12 @@
 
 - name: Copy InterMediate SSL certificate files
   when: not check_etcd_ca_file.stat.exists
-  template:
+  copy:
     src: "{{ item.file }}"
     dest: "{{ intermediate_dir }}/{{ item.bare }}.pem"
   with_items: 
-    - { file: K8S-IM-CA.pem, bare: IM-CA}
-    - { file: K8S-IM-CA-key.pem, bare: IM-CA-key}
+    - { file: files/K8S-IM-CA.pem, bare: IM-CA}
+    - { file: files/K8S-IM-CA-key.pem, bare: IM-CA-key}
   delegate_to: "{{ groups['masters'][0] }}"
   run_once: true
 
