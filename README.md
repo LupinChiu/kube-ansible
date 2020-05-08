@@ -159,6 +159,13 @@ encryption_token -> 已修改
      2. 雖不見得未來會需要使用外部域名的服務，保險起見還是先當成會使用
      3. https://github.com/kubernetes/kubernetes/tree/master/cluster/addons/dns/coredns
   1. 需將 kubernetes 設定改為優先取用私人 docker repo
+     1. 需新增下列 secret 以存取私人 docker registry
+```
+-- Kubernetes 集群使用 docker-registry 类型的 Secret 来通过容器仓库的身份验证，进而提取私有映像。
+
+创建 Secret，命名为 regcred：
+kubectl create secret docker-registry regcred --docker-server=${YOUR_DOCKER_REGISTRY} --docker-username=${USER} --docker-password=${PASSWORD} --docker-email=you@domain.com
+```
 
 Set the variables in `group_vars/all.yml` to reflect you need options. For example:
 ```yml

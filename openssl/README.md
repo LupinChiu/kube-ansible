@@ -31,3 +31,5 @@ extensions 這裡指的是要使用 extfile 內的什麼 session
 
 cfssl gencert -ca=Unicorn-IM-CA.pem -ca-key=Unicorn-IM-CA-key.pem -config=ca-config.json -profile=intermediate-ca ./ca-csr.json | cfssljson -bare etcd-ca
 
+** 測試加簽指令
+cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=intermediate-ca ./test-csr.json | cfssljson -bare k8s-ca
