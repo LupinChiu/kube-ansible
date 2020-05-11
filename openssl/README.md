@@ -10,7 +10,7 @@ openssl req -sha256 -utf8 -nodes -newkey rsa:2048 -keyout ./K8S-IM-CA-key.pem -o
 
 # 自行加簽 (-CAcreateserial 只有簽第一個的時侯要加，簽過之後，如果加上這個參數， serial 號會重頭開始)
 ```
-openssl x509 -req -in K8S-IM-CA.csr -CA Unicorn-IM-CA.pem -CAkey Unicorn-IM-CA-key.pem -out K8S-IM-CA.pem \
+openssl x509 -req -in ./Unicorn-IM-CA/K8S-IM-CA/K8S-IM-CA.csr -CA ./Unicorn-IM-CA/Unicorn-IM-CA.pem -CAkey ./Unicorn-IM-CA/Unicorn-IM-CA-key.pem -out ./Unicorn-IM-CA/K8S-IM-CA/K8S-IM-CA.pem \
 -CAserial Unicorn-IM-CA.serial -CAcreateserial \
 -days 730 \
 -extensions intermediate_ca -extfile K8S-IM.ext

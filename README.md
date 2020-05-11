@@ -166,6 +166,7 @@ encryption_token -> 已修改
 创建 Secret，命名为 regcred：
 kubectl create secret docker-registry regcred --docker-server=${YOUR_DOCKER_REGISTRY} --docker-username=${USER} --docker-password=${PASSWORD} --docker-email=you@domain.com
 ```
+  1. 在 role\cert\main.yml 最下面有一段是刪除所有 .csr 及憑證設定檔 .json 若要長久使用同一憑證，這裡就不太適合刪除
 
 Set the variables in `group_vars/all.yml` to reflect you need options. For example:
 ```yml

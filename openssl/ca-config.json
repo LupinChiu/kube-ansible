@@ -27,8 +27,7 @@
                     "client auth"
                 ],
                 "ca_constraint": {
-                    "is_ca": true,
-                    "max_path_len": 8
+                    "is_ca": true
                 },
                 "expiry": "87600h"
             },
