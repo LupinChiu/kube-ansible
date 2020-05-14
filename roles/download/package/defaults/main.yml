@@ -129,7 +129,7 @@ package:
     url: "{{ base.cni.url }}/containernetworking/plugins/releases/download/v{{ base.cni.version }}"
     unarchive:
       extra_opt: "['--strip-components=0']"
-    file: "cni-plugins-amd64-v{{ base.cni.version }}.tgz"
+    file: "cni-plugins-linux-amd64-v{{ base.cni.version }}.tgz"
   helm:
     name: helm
     dir: /opt/helm

@@ -161,7 +161,7 @@ spec:
     matchLabels:
       k8s-app: calico-typha
 ---
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: calico-typha
@@ -170,6 +170,9 @@ metadata:
     k8s-app: calico-typha
 spec:
   replicas: 0
+  selector:
+    matchLabels:
+      k8s-app: calico-typha
   template:
     metadata:
       labels:
@@ -215,7 +218,7 @@ spec:
           periodSeconds: 10
 ---
 kind: DaemonSet
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 metadata:
   name: calico-node
   namespace: kube-system
@@ -385,7 +388,13 @@ metadata:
 spec:
   scope: Cluster
   group: crd.projectcalico.org
-  version: v1
+  versions:
+    - name: v1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
   names:
     kind: FelixConfiguration
     plural: felixconfigurations
@@ -398,7 +407,13 @@ metadata:
 spec:
   scope: Cluster
   group: crd.projectcalico.org
-  version: v1
+  versions:
+    - name: v1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
   names:
     kind: BGPPeer
     plural: bgppeers
@@ -411,7 +426,13 @@ metadata:
 spec:
   scope: Cluster
   group: crd.projectcalico.org
-  version: v1
+  versions:
+    - name: v1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
   names:
     kind: BGPConfiguration
     plural: bgpconfigurations
@@ -424,7 +445,13 @@ metadata:
 spec:
   scope: Cluster
   group: crd.projectcalico.org
-  version: v1
+  versions:
+    - name: v1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
   names:
     kind: IPPool
     plural: ippools
@@ -437,7 +464,13 @@ metadata:
 spec:
   scope: Cluster
   group: crd.projectcalico.org
-  version: v1
+  versions:
+    - name: v1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
   names:
     kind: HostEndpoint
     plural: hostendpoints
@@ -450,7 +483,13 @@ metadata:
 spec:
   scope: Cluster
   group: crd.projectcalico.org
-  version: v1
+  versions:
+    - name: v1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
   names:
     kind: ClusterInformation
     plural: clusterinformations
@@ -463,7 +502,13 @@ metadata:
 spec:
   scope: Cluster
   group: crd.projectcalico.org
-  version: v1
+  versions:
+    - name: v1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
   names:
     kind: GlobalNetworkPolicy
     plural: globalnetworkpolicies
@@ -476,7 +521,13 @@ metadata:
 spec:
   scope: Cluster
   group: crd.projectcalico.org
-  version: v1
+  versions:
+    - name: v1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
   names:
     kind: GlobalNetworkSet
     plural: globalnetworksets
@@ -489,7 +540,13 @@ metadata:
 spec:
   scope: Namespaced
   group: crd.projectcalico.org
-  version: v1
+  versions:
+    - name: v1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
   names:
     kind: NetworkPolicy
     plural: networkpolicies

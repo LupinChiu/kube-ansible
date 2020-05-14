@@ -30,43 +30,44 @@
   run_once: true
   register: check_etcd_ca_file
 
-- name: Ensure InterMediate PKI directory already exists
-  when: not check_etcd_ca_file.stat.exists
-  file: path={{ intermediate_dir }} state=directory
+  # lupin 修改為 使用 自定中繼憑證 
+# - name: Ensure InterMediate PKI directory already exists
+#   when: not check_etcd_ca_file.stat.exists
+#   file: path={{ intermediate_dir }} state=directory
 
-- name: Copy InterMediate SSL certificate files
-  when: not check_etcd_ca_file.stat.exists
-  copy:
-    src: "{{ item.file }}"
-    dest: "{{ intermediate_dir }}/{{ item.bare }}.pem"
-  with_items: 
-    - { file: files/K8S-IM-CA.pem, bare: IM-CA}
-    - { file: files/K8S-IM-CA-key.pem, bare: IM-CA-key}
-  delegate_to: "{{ groups['masters'][0] }}"
-  run_once: true
-
-- name: Create etcd SSL certificate authority files
-  when: not check_etcd_ca_file.stat.exists
-  shell: |
-    {{ bin_dir }}/cfssl gencert \
-    -ca={{ intermediate_ca }} \
-    -ca-key={{ intermediate_ca_key }} \
-    -config={{ ca_config }} \
-    -profile=intermediate-ca \
-    {{ etcd_pki_dir }}/etcd-ca-csr.json | \
-    {{ bin_dir }}/cfssljson -bare {{ etcd_pki_dir }}/etcd-ca
-  delegate_to: "{{ groups['masters'][0] }}"
-  run_once: true
-  register: create_etcd_ca_file
+# - name: Copy InterMediate SSL certificate files
+#   when: not check_etcd_ca_file.stat.exists
+#   copy:
+#     src: "{{ item.file }}"
+#     dest: "{{ intermediate_dir }}/{{ item.bare }}.pem"
+#   with_items: 
+#     - { file: files/K8S-IM-CA.pem, bare: IM-CA}
+#     - { file: files/K8S-IM-CA-key.pem, bare: IM-CA-key}
+#   delegate_to: "{{ groups['masters'][0] }}"
+#   run_once: true
 
 # - name: Create etcd SSL certificate authority files
 #   when: not check_etcd_ca_file.stat.exists
 #   shell: |
-#     {{ bin_dir }}/cfssl gencert -initca {{ etcd_pki_dir }}/etcd-ca-csr.json | \
-#       {{ bin_dir }}/cfssljson -bare {{ etcd_pki_dir }}/etcd-ca
+#     {{ bin_dir }}/cfssl gencert \
+#     -ca={{ intermediate_ca }} \
+#     -ca-key={{ intermediate_ca_key }} \
+#     -config={{ ca_config }} \
+#     -profile=intermediate-ca \
+#     {{ etcd_pki_dir }}/etcd-ca-csr.json | \
+#     {{ bin_dir }}/cfssljson -bare {{ etcd_pki_dir }}/etcd-ca
 #   delegate_to: "{{ groups['masters'][0] }}"
 #   run_once: true
 #   register: create_etcd_ca_file
+
+- name: Create etcd SSL certificate authority files
+  when: not check_etcd_ca_file.stat.exists
+  shell: |
+    {{ bin_dir }}/cfssl gencert -initca {{ etcd_pki_dir }}/etcd-ca-csr.json | \
+      {{ bin_dir }}/cfssljson -bare {{ etcd_pki_dir }}/etcd-ca
+  delegate_to: "{{ groups['masters'][0] }}"
+  run_once: true
+  register: create_etcd_ca_file
 
 - name: Check etcd SSL certificate key file
   stat:

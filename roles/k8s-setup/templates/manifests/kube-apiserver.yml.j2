@@ -33,7 +33,6 @@ spec:
       - --allow-privileged=true
       - --bind-address={{ apiserver_bind_address }}
       - --secure-port={{ apiserver_secure_port }}
-      - --insecure-port={{ apiserver_insecure_port }}
       - --advertise-address={{ vip_address }}
       - --service-cluster-ip-range={{ service_ip_range }}
       - --service-node-port-range={{ service_node_port_range }}
@@ -64,7 +63,7 @@ spec:
       - --audit-log-maxsize=128
       - --audit-log-path={{ audit_log }}
       - --audit-policy-file={{ audit_policy }}
-      - --experimental-encryption-provider-config={{ encryption_config }}
+      - --encryption-provider-config={{ encryption_config }}
       {% if feature_gates != '' -%}
       - --feature-gates={{ feature_gates }}
       {% endif -%}

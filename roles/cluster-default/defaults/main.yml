@@ -44,7 +44,7 @@ bootstrap_token_secret: "18fac0a6405e8e15"
 bootstrap_token: "{{ bootstrap_token_id }}.{{ bootstrap_token_secret }}"
 
 # Kubernetes secret encryption
-encryption_token: 542o6KeS5424IC0gTHVwaW4K
+encryption_token: ZlR/e9hce4Q3qhfDShAY+rBM/hHtUOLFgCz5WK6wsmU=
 
 # Kubernetes extra addons
 enable_ingress: false

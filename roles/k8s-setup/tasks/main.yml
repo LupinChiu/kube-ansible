@@ -13,8 +13,8 @@
     host: "127.0.0.1"
     port: "{{ item }}"
     delay: 1
-    connect_timeout: 60
-    timeout: 300
+    connect_timeout: 120
+    timeout: 600
   with_items:
     - "{{ apiserver_secure_port }}"
     - "{{ lb_secure_port }}"

@@ -8,8 +8,8 @@ defaults
   mode http
   option dontlognull
   timeout connect 5000ms
-  timeout client 60000ms
-  timeout server 60000ms
+  timeout client 1800000ms
+  timeout server 1800000ms
 
 listen stats
     bind :{{ haproxy_stats_bind_address }}
@@ -20,13 +20,13 @@ listen stats
     stats admin if TRUE
 
 frontend kube-apiserver-https
-   mode tcp
-   bind :{{ lb_secure_port }}
-   default_backend kube-apiserver-backend
+  mode tcp
+  bind :{{ lb_secure_port }}
+  default_backend kube-apiserver-backend
 
 backend kube-apiserver-backend
     mode tcp
 {% for host in groups['masters'] %}
-    server kube-apiserver{{ loop.index }} {{ host }}:{{ apiserver_secure_port }} check
+    server kube-apiserver{{ loop.index }} {{ host }}:{{ apiserver_secure_port }} check fall 3 rise 2
 {% if not loop.last -%}{%- endif -%}
 {% endfor %}
