@@ -110,7 +110,7 @@ k8s-n1
 [nodes]
 k8s-n[1:3]
 
-[kube-cluster:children]
+[kube_cluster:children]
 masters
 nodes
 ```

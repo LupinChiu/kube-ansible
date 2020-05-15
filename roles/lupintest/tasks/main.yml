@@ -1,0 +1,5 @@
+---
+
+- name: check host info
+  debug:
+    msg: "HostName: {{ ansible_hostname }}  nodeName:{{ ansible_nodename }}  domainName:{{ ansible_domain }} FQDN:{{ ansible_fqdn }}"

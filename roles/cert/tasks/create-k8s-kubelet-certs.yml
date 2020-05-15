@@ -19,7 +19,7 @@
       -ca={{ pki_dir }}/ca.pem \
       -ca-key={{ pki_dir }}/ca-key.pem \
       -config={{ ca_config }} \
-      -hostname="{{ ansible_hostname }}" \
+      -hostname="{{ ansible_fqdn }}" \
       -profile={{ cert_info_profile }} \
       {{ pki_dir }}/kubelet-csr.json | \
       {{ bin_dir }}/cfssljson -bare {{ pki_dir }}/kubelet

@@ -1,6 +1,6 @@
 {% macro initial_cluster() -%}
 {% for host in groups['etcds'] -%}
-  {{ hostvars[host]['ansible_hostname'] }}=https://
+  {{ hostvars[host]['ansible_fqdn'] }}=https://
   {%- if etcd_iface != "" -%}
     {{ hostvars[host]['ansible_' + etcd_iface].ipv4.address }}
   {%- else -%}
@@ -11,7 +11,7 @@
 {%- endfor -%}
 {% endmacro -%}
 
-name: {{ ansible_hostname }}
+name: {{ ansible_fqdn }}
 data-dir: {{ etcd_data_dir }}
 wal-dir: {{ etcd_wal_dir }}
 listen-peer-urls: '{{ etcd_listen_peer_urls }}'

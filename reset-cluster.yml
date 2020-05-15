@@ -1,6 +1,6 @@
 ---
 
-- hosts: "{{ hosts | default('kube-cluster') }}"
+- hosts: "{{ hosts | default('kube_cluster') }}"
   become: true
   tags: reset_k8s
   roles:

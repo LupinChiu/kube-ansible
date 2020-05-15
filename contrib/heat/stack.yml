@@ -125,7 +125,7 @@ resources:
                   {% for worker_node_ip_address in worker_nodes_ip_address %}
                   worker-{{ loop.index0 }}
                   {% endfor %}
-                  [kube-cluster:children]
+                  [kube_cluster:children]
                   masters
                   nodes
                 params:

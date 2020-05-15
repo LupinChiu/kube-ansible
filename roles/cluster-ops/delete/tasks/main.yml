@@ -3,7 +3,7 @@
 - name: Set node to maintainer mode
   command: |
     {{ bin_dir }}/kubectl --kubeconfig={{ admin_kubeconfig }} \
-      drain {{ hostvars['' + item].ansible_hostname }} --ignore-daemonsets --force --delete-local-data
+      drain {{ hostvars['' + item].ansible_fqdn }} --ignore-daemonsets --force --delete-local-data
   register: set_drain
   delegate_to: "{{ groups['masters'][0] }}"
   run_once: true
@@ -16,7 +16,7 @@
 - name: Delete node resource from kube-apiserver
   command: |
     {{ bin_dir }}/kubectl --kubeconfig={{ admin_kubeconfig }} \
-      delete node {{ hostvars['' + item].ansible_hostname }}
+      delete node {{ hostvars['' + item].ansible_fqdn }}
   register: delete_node
   delegate_to: "{{ groups['masters'][0] }}"
   run_once: true
