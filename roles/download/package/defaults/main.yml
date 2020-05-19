@@ -32,11 +32,11 @@ base:
     url: "https://kubernetes-helm.storage.googleapis.com"
     version: 2.14.1
   cfssl:
-    url: "https://pkg.cfssl.org"
-    version: 1.2
+    url: "https://github.com/cloudflare/cfssl/releases/download/"
+    version: 1.4.1
   cfssljson:
-    url: "https://pkg.cfssl.org"
-    version: 1.2
+    url: "https://github.com/cloudflare/cfssl/releases/download/"
+    version: 1.4.1
 
 package:
   kubectl:
@@ -142,14 +142,15 @@ package:
   cfssl:
     name: cfssl
     dir: /opt/cfssl
-    url: "{{ base.cfssl.url }}/R{{ base.cfssl.version }}"
+
+    url: "{{ base.cfssl.url }}/v{{ base.cfssl.version }}"
     symlinks:
       - cfssl
-    file: cfssl_linux-amd64
+    file: cfssl_{{ base.cfssl.version }}_linux_amd64
   cfssljson:
     name: cfssljson
     dir: /opt/cfssl
-    url: "{{ base.cfssljson.url }}/R{{ base.cfssljson.version }}"
+    url: "{{ base.cfssljson.url }}/v{{ base.cfssljson.version }}"
     symlinks:
       - cfssljson
-    file: cfssljson_linux-amd64
+    file: cfssljson_{{ base.cfssl.version }}_linux_amd64

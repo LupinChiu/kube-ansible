@@ -33,3 +33,9 @@ cfssl gencert -ca=Unicorn-IM-CA.pem -ca-key=Unicorn-IM-CA-key.pem -config=ca-con
 
 ** 測試加簽指令
 cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=ca-config.json -profile=intermediate-ca ./test-csr.json | cfssljson -bare k8s-ca
+
+cfssl gencert -initca etcd-ca-csr.json | cfssljson -bare etcd-ca
+
+cfssl sign -ca=../intermediate/IM-CA.pem -ca-key=../intermediate/IM-CA-key.pem -config=/tmp/ca-config.json -profile=intermediate-ca etcd-ca.csr | cfssljson -bare etcd-ca
+
+cfssl gencert -ca=../intermediate/IM-CA.pem -ca-key=../intermediate/IM-CA-key.pem -config=/tmp/ca-config.json -profile=intermediate-ca etcd-ca-csr.json | cfssljson -bare etcd-ca

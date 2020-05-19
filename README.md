@@ -115,27 +115,9 @@ masters
 nodes
 ```
 * 失敗及待辨事項：
-  1. etcd 使用的 ca.pem 經初步測試，使用自定的 中繼憑證 會失敗，原因仍然在排查中，暫時使用 舊有方式 自簽 rootCA 的方式讓 etcd 能通過
-  初步判定可能是憑證的 link list 無法辨別，錯誤訊息如下：
-```
-  May 11 19:07:06 k8snode43.udream.local etcd[13795]: health check for peer a9d0c318e1272ae1 could not connect: dial tcp 172.29.19.48:2380: connect: connection refused (prober "ROUND_TRIPPER_RAFT_MESSAGE")
-May 11 19:07:06 k8snode43.udream.local etcd[13795]: health check for peer a9d0c318e1272ae1 could not connect: dial tcp 172.29.19.48:2380: connect: connection refused (prober "ROUND_TRIPPER_SNAPSHOT")
-May 11 19:07:06 k8snode43.udream.local etcd[13795]: health check for peer f9b6ca26f2b010b7 could not connect: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certifi
-May 11 19:07:06 k8snode43.udream.local etcd[13795]: health check for peer f9b6ca26f2b010b7 could not connect: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certifi
-May 11 19:07:06 k8snode43.udream.local etcd[13795]: rejected connection from "172.29.19.49:56828" (error "remote error: tls: bad certificate", ServerName "")
-May 11 19:07:06 k8snode43.udream.local etcd[13795]: rejected connection from "172.29.19.49:56830" (error "remote error: tls: bad certificate", ServerName "")
-May 11 19:07:06 k8snode43.udream.local etcd[13795]: rejected connection from "172.29.19.48:46207" (error "remote error: tls: bad certificate", ServerName "")
-May 11 19:07:06 k8snode43.udream.local etcd[13795]: rejected connection from "172.29.19.48:46206" (error "remote error: tls: bad certificate", ServerName "")
-May 11 19:07:06 k8snode43.udream.local etcd[13795]: rejected connection from "172.29.19.49:56838" (error "remote error: tls: bad certificate", ServerName "")
-
-
-這裡是上面被中斷的錯誤訊息
-May 11 19:02:49 k8snode49 etcd: health check for peer a9d0c318e1272ae1 could not connect: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "etcd") (prober "ROUND_TRIPPER_RAFT_MESSAGE")
-May 11 19:02:49 k8snode49 etcd: health check for peer a9d0c318e1272ae1 could not connect: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "etcd") (prober "ROUND_TRIPPER_SNAPSHOT")
-May 11 19:02:49 k8snode49 etcd: health check for peer d970fd5472d32b4e could not connect: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "etcd") (prober "ROUND_TRIPPER_RAFT_MESSAGE")
-May 11 19:02:49 k8snode49 etcd: health check for peer d970fd5472d32b4e could not connect: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "etcd") (prober "ROUND_TRIPPER_SNAPSHOT")
-```
-  1. K8S-IM 也失敗，目前只要是使用自已的 中繼憑證 通通都宣告失敗，由於沒時間除錯，只能先全部復原，使用原本的自建root CA方式
+  1. (已修正) etcd 使用的 ca.pem 經初步測試，使用自定的 中繼憑證 會失敗，原因仍然在排查中，暫時使用 舊有方式 自簽 rootCA 的方式讓 etcd 能通過 (已修正)
+  1. (已修正) K8S-IM 也失敗，目前只要是使用自已的 中繼憑證 通通都宣告失敗，由於沒時間除錯，只能先全部復原，使用原本的自建root CA方式 (已修正)
+  1. 中繼憑證 失敗問題，升級 cfssl 後，一切即可正常
   1. haproxy 需要新增一個 dns server 以利辨別 haproxy 裡面設定的 server name 解析
      1. 目前是使用此方式：開始前要先把機器名及ip寫入所有機器的 /etc/hosts 裡
 ```
@@ -145,6 +127,11 @@ May 11 19:02:49 k8snode49 etcd: health check for peer d970fd5472d32b4e could not
 172.29.19.43 k8s-m1 k8s-n1
 172.29.19.48 k8s-m2 k8s-n2
 172.29.19.49 k8s-m3 k8s-n3
+```
+  1. 組合現有 ca bundle 指令：
+```
+cat /etc/kubernetes/pki/ca.pem /etc/kubernetes/pki/front-proxy-ca.pem /etc/kubernetes/pki/etcd/etcd-ca.pem /etc/kubernetes/pki/intermediate/IM-CA.ca-bundle.crt.pem > /etc/pki/ca-trust/source/anchors/etcd.ca-bundle.crt
+update-ca-trust
 ```
 
 * 要記得改以下的設定檔：

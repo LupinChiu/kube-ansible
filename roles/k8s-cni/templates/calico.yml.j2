@@ -186,7 +186,7 @@ spec:
           operator: Exists
       serviceAccountName: calico-node
       containers:
-      - image: calico/typha:v3.3.5
+      - image: calico/typha:release-v3.14
         name: calico-typha
         ports:
         - containerPort: 5473
@@ -251,7 +251,7 @@ spec:
       terminationGracePeriodSeconds: 0
       containers:
         - name: calico-node
-          image: calico/node:v3.3.5
+          image: calico/node:release-v3.14
           env:
             - name: CALICO_NETWORKING_BACKEND
               valueFrom:
@@ -336,7 +336,7 @@ spec:
               name: var-lib-calico
               readOnly: false
         - name: install-cni
-          image: calico/cni:v3.3.5
+          image: calico/cni:release-v3.14
           command: ["/install-cni.sh"]
           env:
             - name: CNI_CONF_NAME
@@ -381,172 +381,118 @@ spec:
           hostPath:
             path: /etc/cni/net.d
 ---
-apiVersion: apiextensions.k8s.io/v1
+apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
    name: felixconfigurations.crd.projectcalico.org
 spec:
   scope: Cluster
   group: crd.projectcalico.org
-  versions:
-    - name: v1
-      served: true
-      storage: true
-      schema:
-        openAPIV3Schema:
-          type: object
+  version: v1
   names:
     kind: FelixConfiguration
     plural: felixconfigurations
     singular: felixconfiguration
 ---
-apiVersion: apiextensions.k8s.io/v1
+apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
   name: bgppeers.crd.projectcalico.org
 spec:
   scope: Cluster
   group: crd.projectcalico.org
-  versions:
-    - name: v1
-      served: true
-      storage: true
-      schema:
-        openAPIV3Schema:
-          type: object
+  version: v1
   names:
     kind: BGPPeer
     plural: bgppeers
     singular: bgppeer
 ---
-apiVersion: apiextensions.k8s.io/v1
+apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
   name: bgpconfigurations.crd.projectcalico.org
 spec:
   scope: Cluster
   group: crd.projectcalico.org
-  versions:
-    - name: v1
-      served: true
-      storage: true
-      schema:
-        openAPIV3Schema:
-          type: object
+  version: v1
   names:
     kind: BGPConfiguration
     plural: bgpconfigurations
     singular: bgpconfiguration
 ---
-apiVersion: apiextensions.k8s.io/v1
+apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
   name: ippools.crd.projectcalico.org
 spec:
   scope: Cluster
   group: crd.projectcalico.org
-  versions:
-    - name: v1
-      served: true
-      storage: true
-      schema:
-        openAPIV3Schema:
-          type: object
+  version: v1
   names:
     kind: IPPool
     plural: ippools
     singular: ippool
 ---
-apiVersion: apiextensions.k8s.io/v1
+apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
   name: hostendpoints.crd.projectcalico.org
 spec:
   scope: Cluster
   group: crd.projectcalico.org
-  versions:
-    - name: v1
-      served: true
-      storage: true
-      schema:
-        openAPIV3Schema:
-          type: object
+  version: v1
   names:
     kind: HostEndpoint
     plural: hostendpoints
     singular: hostendpoint
 ---
-apiVersion: apiextensions.k8s.io/v1
+apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
   name: clusterinformations.crd.projectcalico.org
 spec:
   scope: Cluster
   group: crd.projectcalico.org
-  versions:
-    - name: v1
-      served: true
-      storage: true
-      schema:
-        openAPIV3Schema:
-          type: object
+  version: v1
   names:
     kind: ClusterInformation
     plural: clusterinformations
     singular: clusterinformation
 ---
-apiVersion: apiextensions.k8s.io/v1
+apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
   name: globalnetworkpolicies.crd.projectcalico.org
 spec:
   scope: Cluster
   group: crd.projectcalico.org
-  versions:
-    - name: v1
-      served: true
-      storage: true
-      schema:
-        openAPIV3Schema:
-          type: object
+  version: v1
   names:
     kind: GlobalNetworkPolicy
     plural: globalnetworkpolicies
     singular: globalnetworkpolicy
 ---
-apiVersion: apiextensions.k8s.io/v1
+apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
   name: globalnetworksets.crd.projectcalico.org
 spec:
   scope: Cluster
   group: crd.projectcalico.org
-  versions:
-    - name: v1
-      served: true
-      storage: true
-      schema:
-        openAPIV3Schema:
-          type: object
+  version: v1
   names:
     kind: GlobalNetworkSet
     plural: globalnetworksets
     singular: globalnetworkset
 ---
-apiVersion: apiextensions.k8s.io/v1
+apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
   name: networkpolicies.crd.projectcalico.org
 spec:
   scope: Namespaced
   group: crd.projectcalico.org
-  versions:
-    - name: v1
-      served: true
-      storage: true
-      schema:
-        openAPIV3Schema:
-          type: object
+  version: v1
   names:
     kind: NetworkPolicy
     plural: networkpolicies

@@ -3,11 +3,29 @@
 - name: Ensure etcd PKI directory already exists
   file: path={{ etcd_pki_dir }} state=directory
 
-- name: Check etcd SSL certificate json files
+- name: Check etcd ca SSL certificate json files
   stat:
     path: "{{ etcd_pki_dir }}/{{ item.bare }}.pem"
   with_items:
     - { file: etcd-ca-csr.json, name: etcd, org: etcd, bare: etcd-ca}
+  delegate_to: "{{ groups['masters'][0] }}"
+  run_once: true
+  register: check_etcd_ca_json_files
+
+- name: Generate etcd ca SSL certificate json files
+  when: check_etcd_ca_json_files and not item.stat.exists
+  template:
+    src: noca-csr.json.j2
+    dest: "{{ etcd_pki_dir }}/{{ item.item.file }}"
+  with_items: "{{ check_etcd_ca_json_files['results'] }}"
+  delegate_to: "{{ groups['masters'][0] }}"
+  run_once: true
+  register: gen_etcd_json_files
+
+- name: Check etcd SSL certificate json files
+  stat:
+    path: "{{ etcd_pki_dir }}/{{ item.bare }}.pem"
+  with_items:
     - { file: etcd-csr.json, name: etcd, org: etcd, bare: etcd }
   delegate_to: "{{ groups['masters'][0] }}"
   run_once: true
@@ -16,7 +34,7 @@
 - name: Generate etcd SSL certificate json files
   when: check_etcd_json_files and not item.stat.exists
   template:
-    src: ca-csr.json.j2
+    src: noca-csr.json.j2
     dest: "{{ etcd_pki_dir }}/{{ item.item.file }}"
   with_items: "{{ check_etcd_json_files['results'] }}"
   delegate_to: "{{ groups['masters'][0] }}"
@@ -31,30 +49,43 @@
   register: check_etcd_ca_file
 
   # lupin 修改為 使用 自定中繼憑證 
-# - name: Ensure InterMediate PKI directory already exists
-#   when: not check_etcd_ca_file.stat.exists
-#   file: path={{ intermediate_dir }} state=directory
+- name: Ensure InterMediate PKI directory already exists
+  when: not check_etcd_ca_file.stat.exists
+  file: path={{ intermediate_dir }} state=directory
 
-# - name: Copy InterMediate SSL certificate files
+- name: Copy InterMediate SSL certificate files
+  when: not check_etcd_ca_file.stat.exists
+  copy:
+    src: "{{ item.file }}"
+    dest: "{{ intermediate_dir }}/{{ item.bare }}.pem"
+  with_items: 
+    - { file: files/K8S-IM-CA.pem, bare: IM-CA}
+    - { file: files/K8S-IM-CA-key.pem, bare: IM-CA-key}
+    - { file: files/K8S-IM.ca-bundle.crt, bare: IM-CA.ca-bundle.crt}
+  delegate_to: "{{ groups['masters'][0] }}"
+  run_once: true
+
+# 另一種簽憑證方式，但是只要將cfssl 升至 1.4.1 就可以直接使用最下面的方式一次簽
+# - name: Create etcd SSL certificate key files
 #   when: not check_etcd_ca_file.stat.exists
-#   copy:
-#     src: "{{ item.file }}"
-#     dest: "{{ intermediate_dir }}/{{ item.bare }}.pem"
-#   with_items: 
-#     - { file: files/K8S-IM-CA.pem, bare: IM-CA}
-#     - { file: files/K8S-IM-CA-key.pem, bare: IM-CA-key}
+#   shell: |
+#     {{ bin_dir }}/cfssl gencert \
+#     -initca \
+#     {{ etcd_pki_dir }}/etcd-ca-csr.json | \
+#     {{ bin_dir }}/cfssljson -bare {{ etcd_pki_dir }}/etcd-ca
 #   delegate_to: "{{ groups['masters'][0] }}"
 #   run_once: true
+#   register: create_etcd_ca_key_file
 
 # - name: Create etcd SSL certificate authority files
 #   when: not check_etcd_ca_file.stat.exists
 #   shell: |
-#     {{ bin_dir }}/cfssl gencert \
+#     {{ bin_dir }}/cfssl sign \
 #     -ca={{ intermediate_ca }} \
 #     -ca-key={{ intermediate_ca_key }} \
 #     -config={{ ca_config }} \
 #     -profile=intermediate-ca \
-#     {{ etcd_pki_dir }}/etcd-ca-csr.json | \
+#     {{ etcd_pki_dir }}/etcd-ca.csr | \
 #     {{ bin_dir }}/cfssljson -bare {{ etcd_pki_dir }}/etcd-ca
 #   delegate_to: "{{ groups['masters'][0] }}"
 #   run_once: true
@@ -63,11 +94,26 @@
 - name: Create etcd SSL certificate authority files
   when: not check_etcd_ca_file.stat.exists
   shell: |
-    {{ bin_dir }}/cfssl gencert -initca {{ etcd_pki_dir }}/etcd-ca-csr.json | \
-      {{ bin_dir }}/cfssljson -bare {{ etcd_pki_dir }}/etcd-ca
+    {{ bin_dir }}/cfssl gencert \
+    -ca={{ intermediate_ca }} \
+    -ca-key={{ intermediate_ca_key }} \
+    -config={{ ca_config }} \
+    -profile=intermediate-ca \
+    {{ etcd_pki_dir }}/etcd-ca-csr.json | \
+    {{ bin_dir }}/cfssljson -bare {{ etcd_pki_dir }}/etcd-ca
   delegate_to: "{{ groups['masters'][0] }}"
   run_once: true
   register: create_etcd_ca_file
+
+# 舊的生成自簽憑證 (RootCA)
+# - name: Create etcd SSL certificate authority files
+#   when: not check_etcd_ca_file.stat.exists
+#   shell: |
+#     {{ bin_dir }}/cfssl gencert -initca {{ etcd_pki_dir }}/etcd-ca-csr.json | \
+#       {{ bin_dir }}/cfssljson -bare {{ etcd_pki_dir }}/etcd-ca
+#   delegate_to: "{{ groups['masters'][0] }}"
+#   run_once: true
+#   register: create_etcd_ca_file
 
 - name: Check etcd SSL certificate key file
   stat:
