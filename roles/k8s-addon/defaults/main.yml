@@ -32,6 +32,17 @@ addons:
       - dashboard/dashboard-secret.yml
       - dashboard/dashboard-svc.yml
       - dashboard/dashboard-dp.yml
+  dashboard_new:
+    name: kubernetes-dashboard
+    directories:
+      - dashboard-new
+    templates:
+      - dashboard-new/dashboard-sa.yml
+      - dashboard-new/dashboard-rbac.yml
+      - dashboard-new/dashboard-anonymous-rbac.yml
+      - dashboard-new/dashboard-secret.yml
+      - dashboard-new/dashboard-svc.yml
+      - dashboard-new/dashboard-dp.yml
   metric_server:
     name: metric-server
     directories:
