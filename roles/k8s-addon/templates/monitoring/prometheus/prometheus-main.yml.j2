@@ -13,7 +13,7 @@ spec:
       port: web
   baseImage: quay.io/prometheus/prometheus
   nodeSelector:
-    beta.kubernetes.io/os: linux
+    kubernetes.io/os: linux
   replicas: 2
   resources:
     requests:

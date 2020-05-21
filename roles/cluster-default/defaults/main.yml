@@ -5,7 +5,7 @@
 # Kubernetes opts #
 ###################
 
-kube_version: 1.13.4
+kube_version: 1.18.0
 
 # Container runtime,
 # Supported: docker, containerd.

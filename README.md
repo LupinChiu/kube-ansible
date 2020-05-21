@@ -128,11 +128,14 @@ nodes
 172.29.19.48 k8s-m2 k8s-n2
 172.29.19.49 k8s-m3 k8s-n3
 ```
+
   1. 組合現有 ca bundle 指令：
 ```
 cat /etc/kubernetes/pki/ca.pem /etc/kubernetes/pki/front-proxy-ca.pem /etc/kubernetes/pki/etcd/etcd-ca.pem /etc/kubernetes/pki/intermediate/IM-CA.ca-bundle.crt.pem > /etc/pki/ca-trust/source/anchors/etcd.ca-bundle.crt
 update-ca-trust
 ```
+
+  1. 目前 kubernetes cni 使用 calico 且 用的是他們官網的設定，舊的設定 calico node 會一直無法啟動
 
 * 要記得改以下的設定檔：
 ```
