@@ -89,6 +89,9 @@ spec:
     - mountPath: /etc/ssl/certs
       name: ca-certs
       readOnly: true
+    - mountPath: /etc/pki
+      name: pki-certs
+      readOnly: true
     - mountPath: {{ encryption_config }}
       name: encryption-config
       readOnly: true
@@ -123,3 +126,7 @@ spec:
       path: /etc/ssl/certs
       type: Directory
     name: ca-certs
+  - hostPath:
+      path: /etc/pki
+      type: Directory
+    name: pki-certs

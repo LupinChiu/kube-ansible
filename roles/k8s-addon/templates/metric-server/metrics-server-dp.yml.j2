@@ -18,15 +18,46 @@ spec:
       serviceAccountName: metrics-server
       containers:
       - name: metrics-server
-        image: k8s.gcr.io/metrics-server-amd64:v0.3.1
-        imagePullPolicy: Always
-        command:
-        - /metrics-server
-        - --kubelet-insecure-tls
-        - --kubelet-preferred-address-types=InternalIP
+        image: k8s.gcr.io/metrics-server-amd64:v0.3.6
+        resources:
+          requests:
+              cpu: "5m"
+              memory: "50Mi"
+        imagePullPolicy: IfNotPresent
+        args:
+          #- --tls-cert-file={{ kubelet }}
+          #- --tls-private-key-file={{ kubelet_key }}
+          - --v=7
+          - --cert-dir=/tmp
+          - --secure-port=4443
+          #- --kubelet-preferred-address-types=InternalIP,Hostname,InternalDNS,ExternalDNS,ExternalIP
+          - --kubelet-preferred-address-types=InternalIP,Hostname,InternalDNS
+          - --kubelet-insecure-tls
+        ports:
+        - name: main-port
+          containerPort: 4443
+          protocol: TCP
+        securityContext:
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 1000
         volumeMounts:
         - name: tmp-dir
           mountPath: /tmp
+        - mountPath: {{ pki_dir }}
+          name: k8s-certs
+          readOnly: true
       volumes:
+      # mount in tmp so we can safely use from-scratch images and/or read-only containers
       - name: tmp-dir
         emptyDir: {}
+      - hostPath:
+          path: {{ pki_dir }}
+          type: Directory
+        name: k8s-certs
+      nodeSelector:
+        kubernetes.io/os: linux
+        kubernetes.io/arch: "amd64"
+      tolerations:
+      - key: node.kubernetes.io/lupin
+        effect: NoSchedule

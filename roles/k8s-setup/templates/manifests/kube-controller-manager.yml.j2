@@ -55,6 +55,9 @@ spec:
     - mountPath: /etc/ssl/certs
       name: ca-certs
       readOnly: true
+    - mountPath: /etc/pki
+      name: pki-certs
+      readOnly: true
     - mountPath: {{ controller_manager_kubeconfig }}
       name: kubeconfig
       readOnly: true
@@ -69,6 +72,10 @@ spec:
       path: /etc/ssl/certs
       type: DirectoryOrCreate
     name: ca-certs
+  - hostPath:
+      path: /etc/pki
+      type: DirectoryOrCreate
+    name: pki-certs
   - hostPath:
       path: {{ controller_manager_kubeconfig }}
       type: File

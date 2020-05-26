@@ -124,6 +124,8 @@ nodes
   1. 中繼憑證 失敗問題，升級 cfssl 後，一切即可正常
   1. haproxy 需要新增一個 dns server 以利辨別 haproxy 裡面設定的 server name 解析
      1. 目前是使用此方式：開始前要先把機器名及ip寫入所有機器的 /etc/hosts 裡
+  1. CNI 一樣是無法正常使用 typha 版本，目前只能使用 一般版本 (待修正處理)
+  1. metrics-server 的參數目前設定仍然是未驗證成功 (待修正處理)
 ```
   echo -e "172.29.19.43 k8s-m1 k8s-n1\n172.29.19.48 k8s-m2 k8s-n2\n172.29.19.49 k8s-m3 k8s-n3" >> /etc/hosts
 

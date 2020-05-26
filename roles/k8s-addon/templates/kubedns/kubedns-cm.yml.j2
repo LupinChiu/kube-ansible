@@ -16,6 +16,11 @@ data:
         reload
         loadbalance
     }
+    udream.local:53 {
+      errors
+      cache 30
+      proxy . 176.29.16.4
+    }
 kind: ConfigMap
 metadata:
   name: coredns
