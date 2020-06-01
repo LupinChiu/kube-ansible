@@ -139,6 +139,11 @@ nodes
 ```
 cat /etc/kubernetes/pki/ca.pem /etc/kubernetes/pki/front-proxy-ca.pem /etc/kubernetes/pki/etcd/etcd-ca.pem /etc/kubernetes/pki/intermediate/IM-CA.ca-bundle.crt.pem > /etc/pki/ca-trust/source/anchors/etcd.ca-bundle.crt
 update-ca-trust
+
+建立secret resource
+kubectl create secret tls frognew-com-tls-secret --cert=fullchain.pem --key=privkey.pem -n istio-system
+猜測 --cert 這裡可能要將bundle完整的放入
+
 ```
 
   1. 目前 kubernetes cni 使用 calico 且 用的是他們官網的設定，舊的設定 calico node 會一直無法啟動
@@ -257,3 +262,21 @@ $ ansible-playbook -i inventory/hosts.ini reset-cluster.yml
 
 ## Contributing
 Pull requests are always welcome!!! I am always thrilled to receive pull requests.
+
+# make all chain
+```
+cd /etc/kubernetes/pki/
+cat ca.pem intermediate/IM-CA.ca-bundle.crt.pem > ca-chain.pem
+cat front-proxy-ca.pem intermediate/IM-CA.ca-bundle.crt.pem > front-proxy-ca-chain.pem
+cat ./etcd/etcd-ca.pem ./intermediate/IM-CA.ca-bundle.crt.pem > ./etcd/etcd-ca-chain.pem
+
+cat apiserver.pem ca-chain.pem > apiserver-chain.pem
+cat admin.pem ca-chain.pem > admin-chain.pem
+cat controller-manager.pem ca-chain.pem > controller-manager-chain.pem
+cat kubelet.pem ca-chain.pem > kubelet-chain.pem
+cat scheduler.pem ca-chain.pem > scheduler-chain.pem
+
+cat front-proxy-client.pem front-proxy-ca-chain.pem > front-proxy-client-chain.pem
+
+cat ./etcd/etcd.pem ./etcd/etcd-ca-chain.pem > ./etcd/etcd-chain.pem
+```

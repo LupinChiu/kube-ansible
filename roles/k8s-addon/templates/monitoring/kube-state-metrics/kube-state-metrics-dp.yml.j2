@@ -16,6 +16,9 @@ spec:
         app: kube-state-metrics
     spec:
       serviceAccountName: kube-state-metrics
+      tolerations:
+        - effect: NoSchedule
+          operator: Exists
       containers:
       - name: kube-rbac-proxy-main
         image: quay.io/coreos/kube-rbac-proxy:v0.4.1

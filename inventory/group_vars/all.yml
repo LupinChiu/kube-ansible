@@ -21,7 +21,8 @@ enable_ingress: true
 enable_dashboard: true
 enable_logging: false
 enable_monitoring: false
-enable_metric_server: true
+enable_metric_server: false
+enable_istio: false
 
 ansible_ssh_port: 22
 ansible_ssh_private_key_file: /K8S_Ansible/sshkey/unicorn_kubernetes_key

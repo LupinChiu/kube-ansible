@@ -23,6 +23,9 @@ spec:
                 - "true"
       hostNetwork: true
       hostPID: true
+      tolerations:
+        - effect: NoSchedule
+          operator: Exists
       containers:
       - name: node-gpu-exporter
         image: kairen/gpu-prometheus-exporter:v0.1.0

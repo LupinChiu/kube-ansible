@@ -25,8 +25,6 @@ spec:
       tolerations:
       - effect: NoExecute
         operator: Exists
-      - effect: NoSchedule
-        operator: Exists
       containers:
       - name: node-exporter
         image: quay.io/prometheus/node-exporter:v0.17.0
