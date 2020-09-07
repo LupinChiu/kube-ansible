@@ -29,26 +29,34 @@
                 "ca_constraint": {
                     "is_ca": true
                 },
+                "issuer_urls":[
+                    // "http://pki.unicorn.udream.local/Unicorn-IM-CA.crt"
+                    "http://pki.unicorn.udream.local/K8S-IM-CA.pem"
+                ],
                 "expiry": "87600h"
             },
             "intermediate-ca-EndPath": {
                 "usages": [
-                  "signing",
-                  "cert sign",
-                  "crl sign",
-                  "digital signature",
-                  "key encipherment",
-                  "data encipherment",
-                  "server auth",
-                  "client auth"
+                    "signing",
+                    "cert sign",
+                    "crl sign",
+                    "digital signature",
+                    "key encipherment",
+                    "data encipherment",
+                    "server auth",
+                    "client auth"
                 ],
                 "ca_constraint": {
-                  "is_ca": true,
-                  "max_path_len": 0,
-                  "max_path_len_zero": true
+                    "is_ca": true,
+                    "max_path_len": 0,
+                    "max_path_len_zero": true
                 },
+                "issuer_urls":[
+                    // "http://pki.unicorn.udream.local/Unicorn-IM-CA.crt"
+                    "http://pki.unicorn.udream.local/K8S-IM-CA.pem"
+                ],
                 "expiry": "87600h"
-              }
+            }
         }
     }
 }

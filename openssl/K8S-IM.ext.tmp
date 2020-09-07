@@ -6,12 +6,6 @@ basicConstraints = CA:true
 keyUsage = digitalSignature, keyEncipherment, keyCertSign, cRLSign
 extendedKeyUsage = serverAuth, clientAuth
 
-[ end_use ]
-authorityKeyIdentifier = keyid:always,issuer
-authorityInfoAccess = @issuer_info
-keyUsage = digitalSignature, keyEncipherment, keyCertSign, cRLSign
-extendedKeyUsage = serverAuth, clientAuth
-
 # 要把parent crt路徑寫入，需要一個空間存parent crt
-[ issuer_info ]
-caIssuers;URI.0 = http://pki.unicorn.udream.local/Unicorn-IM-CA.crt
+[issuer_info]
+caIssuers;URI.0 = http://pki.unicorn.udream.local:10080/{{parent}}.crt
