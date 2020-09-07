@@ -20,8 +20,6 @@ spec:
     spec:
       serviceAccountName: kube-dns-autoscaler
       tolerations:
-      - key: node.kubernetes.io/lupin
-        effect: NoSchedule
       - key: "CriticalAddonsOnly"
         operator: "Exists"
       priorityClassName: system-cluster-critical

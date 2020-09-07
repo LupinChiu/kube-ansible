@@ -29,6 +29,7 @@ kubelet_bind_healthz_port: 10248
 kubelet_resolv_conf: /etc/resolv.conf
 
 # keepalived variables
+keepalived_virtual_ips: "{{ vip_address }}, 172.29.19.36, 172.29.19.37"
 keepalived_unicast_peers: "{% for host in groups['masters'] %}{% if vip_interface != '' %}'{{ hostvars[host]['ansible_' + vip_interface].ipv4.address }}'{% else %}'{{ hostvars[host].ansible_default_ipv4.address }}'{% endif %}{% if not loop.last %},{% endif %}{% endfor %}"
 keepalived_password: "unicorn-kubernetes-keepalive"
 keepalived_priority: "{% if inventory_hostname == groups['masters'][0] %}200{% else %}150{% endif %}"

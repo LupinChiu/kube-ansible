@@ -60,9 +60,9 @@ spec:
       nodeSelector:
         "kubernetes.io/os": linux
       # Comment the following tolerations if Dashboard must not be deployed on master
-      tolerations:
-        - key: node.kubernetes.io/lupin
-          effect: NoSchedule
+      #tolerations:
+      #  - key: node.kubernetes.io/lupin
+      #    effect: NoSchedule
 ---
 
 kind: Deployment
@@ -110,9 +110,9 @@ spec:
       nodeSelector:
         "kubernetes.io/os": linux
       # Comment the following tolerations if Dashboard must not be deployed on master
-      tolerations:
-        - key: node.kubernetes.io/lupin
-          effect: NoSchedule
+      #tolerations:
+      #  - key: node.kubernetes.io/lupin
+      #    effect: NoSchedule
       volumes:
         - name: tmp-volume
           emptyDir: {}

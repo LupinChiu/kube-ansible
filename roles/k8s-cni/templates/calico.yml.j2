@@ -806,8 +806,6 @@ spec:
         # Mark the pod as a critical add-on for rescheduling.
         - key: CriticalAddonsOnly
           operator: Exists
-        - key: node.kubernetes.io/lupin
-          effect: NoSchedule
       serviceAccountName: calico-kube-controllers
       priorityClassName: system-cluster-critical
       containers:

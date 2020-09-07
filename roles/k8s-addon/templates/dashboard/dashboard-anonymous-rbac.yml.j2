@@ -75,7 +75,7 @@ rules:
   resources: ["services/proxy"]
   resourceNames: ["https:kubernetes-dashboard:"]
   verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
-- nonResourceURLs: ["/ui", "/ui/*", "/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/*"]
+- nonResourceURLs: ["/ui", "/ui/*", "/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/*"]
   verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
 
 ---
