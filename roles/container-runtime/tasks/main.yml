@@ -1,4 +1,22 @@
 ---
+# - name: Disable services if enabled
+#   shell: if systemctl is-enabled --quiet {{ item }}; then systemctl disable {{ item }} && echo disable_ok ; fi
+#   register: output
+#   changed_when: "'disable_ok' in output.stdout"
+#   with_items:
+#     - firewalld
+#     - iptables
+- name: ------- Disable firewalld -------
+  systemd:
+    name: "{{ item }}"
+    daemon_reload: yes
+    state: stopped
+    enabled: no
+  with_items:
+    - "firewalld"
+    - "iptables"
+  ignore_errors: True
+  register: disable_firewalld
 
 - when: container_runtime == 'nvidia-docker'
   raw: "nvidia-smi"
