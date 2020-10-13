@@ -137,7 +137,7 @@ nodes
 
   1. 組合現有 ca bundle 指令：
 ```
-cat /etc/kubernetes/pki/ca.pem /etc/kubernetes/pki/front-proxy-ca.pem /etc/kubernetes/pki/etcd/etcd-ca.pem /etc/kubernetes/pki/intermediate/IM-CA.ca-bundle.crt.pem > /etc/pki/ca-trust/source/anchors/etcd.ca-bundle.crt
+cat /etc/kubernetes/pki/ca.pem /etc/kubernetes/pki/front-proxy-ca.pem /etc/kubernetes/pki/etcd/etcd-ca.pem /etc/kubernetes/pki/intermediate/IM-CA-bundle.crt.pem > /etc/pki/ca-trust/source/anchors/etcd.ca-bundle.crt
 update-ca-trust
 
 建立secret resource
@@ -266,9 +266,9 @@ Pull requests are always welcome!!! I am always thrilled to receive pull request
 # make all chain
 ```
 cd /etc/kubernetes/pki/
-cat ca.pem intermediate/IM-CA.ca-bundle.crt.pem > ca-chain.pem
-cat front-proxy-ca.pem intermediate/IM-CA.ca-bundle.crt.pem > front-proxy-ca-chain.pem
-cat ./etcd/etcd-ca.pem ./intermediate/IM-CA.ca-bundle.crt.pem > ./etcd/etcd-ca-chain.pem
+cat ca.pem intermediate/IM-CA-bundle.crt.pem > ca-chain.pem
+cat front-proxy-ca.pem intermediate/IM-CA-bundle.crt.pem > front-proxy-ca-chain.pem
+cat ./etcd/etcd-ca.pem ./intermediate/IM-CA-bundle.crt.pem > ./etcd/etcd-ca-chain.pem
 
 cat apiserver.pem ca-chain.pem > apiserver-chain.pem
 cat admin.pem ca-chain.pem > admin-chain.pem

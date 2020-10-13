@@ -31,15 +31,15 @@ kubelet_resolv_conf: /etc/resolv.conf
 # keepalived variables
 keepalived_virtual_ips: "{{ vip_address }}, 172.29.19.36, 172.29.19.37"
 keepalived_unicast_peers: "{% for host in groups['masters'] %}{% if vip_interface != '' %}'{{ hostvars[host]['ansible_' + vip_interface].ipv4.address }}'{% else %}'{{ hostvars[host].ansible_default_ipv4.address }}'{% endif %}{% if not loop.last %},{% endif %}{% endfor %}"
-keepalived_password: "unicorn-kubernetes-keepalive"
+keepalived_password: "lupin-kubernetes-keepalive"
 keepalived_priority: "{% if inventory_hostname == groups['masters'][0] %}200{% else %}150{% endif %}"
 keepalived_router_id: 51
 
 # haproxy variables
 haproxy_stats_bind_address: 9090
 haproxy_stats_uri: "/haproxy_stats"
-haproxy_stats_user: "unicorn-admin"
-haproxy_stats_password: "unicorn9527"
+haproxy_stats_user: "lupin-admin"
+haproxy_stats_password: "lupin9527"
 
 runtime_sockets:
   containerd: /run/containerd/containerd.sock

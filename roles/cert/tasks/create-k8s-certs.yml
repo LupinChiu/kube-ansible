@@ -69,7 +69,7 @@
   with_items: 
     - { file: files/K8S-IM-CA.pem, bare: IM-CA}
     - { file: files/K8S-IM-CA-key.pem, bare: IM-CA-key}
-    - { file: files/K8S-IM.ca-bundle.crt, bare: IM-CA.ca-bundle.crt}
+    - { file: files/K8S-IM-bundle.pem, bare: IM-CA-bundle.crt}
   delegate_to: "{{ groups['masters'][0] }}"
   run_once: true
 

@@ -9,10 +9,12 @@ base:
     version: "{{ kube_version }}"
   etcd:
     url: "https://github.com"
-    version: 3.3.12
+#    version: 3.3.12
+    version: 3.4.13
   docker:
     url: "https://download.docker.com"
-    version: 18.09.3
+#    version: 18.09.3
+    version: 19.03.9
   nvidia_docker:
     url: "https://github.com"
     version: 2.0.3
@@ -27,7 +29,7 @@ base:
     version: 1.2.4
   cni:
     url: "https://github.com"
-    version: 0.8.5
+    version: 0.8.7
   helm:
     url: "https://kubernetes-helm.storage.googleapis.com"
     version: 2.14.1
@@ -56,7 +58,7 @@ package:
   etcd:
     name: etcd
     dir: /opt/etcd
-    url: "{{ base.etcd.url }}/coreos/etcd/releases/download/v{{ base.etcd.version }}"
+    url: "{{ base.etcd.url }}/etcd-io/etcd/releases/download/v{{ base.etcd.version }}"
     unarchive:
       extra_opt: "['--strip-components=1']"
     symlinks:

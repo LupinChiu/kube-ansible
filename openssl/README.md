@@ -1,6 +1,11 @@
 * Openssl 簽發中繼憑證 config 檔
   sign-ssl.conf
 
+# 自簽 root CA
+```
+openssl req -x509 -new -sha256 -utf8 -nodes -newkey rsa:2048 -days 3650 -keyout Lupin-Root-CA-key.pem -out Lupin-Root-CA.pem -config rootCA.conf
+```
+
 # 產生 csr 及 key
 ```
 openssl req -sha256 -utf8 -nodes -newkey rsa:2048 -keyout ./Unicorn-IM-CA-key.pem -out ./Unicorn-IM-CA.csr -config ./sign-ssl.conf

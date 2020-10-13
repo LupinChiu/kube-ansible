@@ -1,6 +1,6 @@
 ---
 # 需調整版本
-kube_version: 1.18.0
+kube_version: 1.19.0
 
 # Container runtime,
 # Supported: docker, nvidia-docker, containerd.
@@ -14,7 +14,7 @@ container_network: calico
 # 需調整vip ip - vip 指的是 api server 統一對外ip(未)
 # Kubernetes HA extra variables.
 vip_interface: ""
-vip_address: 172.29.19.47
+vip_address: 10.0.1.180
 
 # Kubernetes extra addons
 enable_ingress: true
@@ -25,5 +25,5 @@ enable_metric_server: false
 enable_istio: false
 
 ansible_ssh_port: 22
-ansible_ssh_private_key_file: /K8S_Ansible/sshkey/unicorn_kubernetes_key
+ansible_ssh_private_key_file: /K8S_Ansible/sshkey/urAD-Dev
 ansible_ssh_user: root

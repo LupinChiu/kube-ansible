@@ -59,7 +59,7 @@ intermediate_dir: "{{ pki_dir }}/intermediate"
 
 intermediate_ca: "{{ intermediate_dir }}/IM-CA.pem"
 intermediate_ca_key: "{{ intermediate_dir }}/IM-CA-key.pem"
-intermediate_ca_bundle: "{{ intermediate_dir }}/IM-CA.ca-bundle.crt.pem"
+intermediate_ca_bundle: "{{ intermediate_dir }}/IM-CA-bundle.crt.pem"
 ca: "{{ pki_dir }}/ca.pem"
 ca_key: "{{ pki_dir }}/ca-key.pem"
 etcd_ca: "{{ etcd_pki_dir }}/etcd-ca.pem"

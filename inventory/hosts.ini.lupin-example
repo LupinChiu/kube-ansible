@@ -1,43 +1,45 @@
+
+k8s-m1      ansible_ssh_host=10.0.1.151
+k8s-m2      ansible_ssh_host=10.0.1.152
+k8s-m3      ansible_ssh_host=10.0.1.153
+k8s-m4      ansible_ssh_host=10.0.1.154
+k8s-n1      ansible_ssh_host=10.0.1.151
+k8s-n2      ansible_ssh_host=10.0.1.152
+k8s-n3      ansible_ssh_host=10.0.1.153
+k8s-n4      ansible_ssh_host=10.0.1.154
+
+[all-servers:vars]
 ansible_ssh_port=22
-ansible_ssh_private_key_file=/K8S_Ansible/sshkey/unicorn_kubernetes_key
+ansible_ssh_private_key_file=./sshkey/urAD-Dev
 ansible_ssh_user=root
 
-k8s-m1      ansible_ssh_host=172.29.19.43
-k8s-m2      ansible_ssh_host=172.29.19.48
-k8s-m3      ansible_ssh_host=172.29.19.49
-k8s-n1      ansible_ssh_host=172.29.19.43
-k8s-n2      ansible_ssh_host=172.29.19.48
-k8s-n3      ansible_ssh_host=172.29.19.49
+[all-servers]
+k8s-m1
+k8s-m2
+k8s-m3
+k8s-m4
+k8s-n1
+k8s-n2
+k8s-n3
+k8s-n4
 
 [etcds]
 k8s-m1
 k8s-m2
 k8s-m3
-
-; [etcds:vars]
-; ansible_ssh_port=57522
-; ansible_ssh_private_key_file=/Ansible/keys/unicorn_kubernetes_key
-; ansible_ssh_user=root
+k8s-m4
 
 [masters]
 k8s-m1
 k8s-m2
 k8s-m3
-
-; [masters:vars]
-; ansible_ssh_port=57522
-; ansible_ssh_private_key_file=/Ansible/keys/unicorn_kubernetes_key
-; ansible_ssh_user=root
+k8s-m4
 
 [nodes]
 k8s-n1
 k8s-n2
 k8s-n3
-
-; [nodes:vars]
-; ansible_ssh_port=57522
-; ansible_ssh_private_key_file=/Ansible/keys/unicorn_kubernetes_key
-; ansible_ssh_user=root
+k8s-n4
 
 [kube_cluster:children]
 masters
