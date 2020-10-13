@@ -40,3 +40,11 @@
     src: "{{ admin_kubeconfig }}"
     dest: "{{ ansible_env.HOME }}/.kube/config"
     remote_src: yes
+
+- name: Add mappings to /etc/hosts
+  blockinfile:
+    path: /etc/hosts
+    block: |
+      {{ hostvars[item].ansible_default_ipv4.address }} {{ item }}
+    marker: "# {mark} ANSIBLE MANAGED BLOCK {{ item }}"
+  with_items: "{{ groups['masters'] }}"

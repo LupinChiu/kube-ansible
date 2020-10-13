@@ -135,3 +135,10 @@
   when: stop_kubelet_service and find_blackhole.stdout != ''
   shell: "ip route del {{ find_blackhole.stdout }}"
   ignore_errors: True
+
+- name: Remove mappings to /etc/hosts
+  blockinfile:
+    path: /etc/hosts
+    block: ""
+    marker: "# {mark} ANSIBLE MANAGED BLOCK {{ item }}"
+  with_items: "{{ groups['masters'] }}"

@@ -27,6 +27,10 @@ frontend kube-apiserver-https
 backend kube-apiserver-backend
     mode tcp
 {% for host in groups['masters'] %}
+{% if haproxy_have_dns_server %}
+    server kube-apiserver{{ loop.index }} {{ hostvars[host]['ansible_fqdn'] }}:{{ apiserver_secure_port }} check fall 3 rise 2
+{% else %}
     server kube-apiserver{{ loop.index }} {{ host }}:{{ apiserver_secure_port }} check fall 3 rise 2
+{% endif %}
 {% if not loop.last -%}{%- endif -%}
 {% endfor %}

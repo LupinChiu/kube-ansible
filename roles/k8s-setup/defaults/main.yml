@@ -40,6 +40,7 @@ haproxy_stats_bind_address: 9090
 haproxy_stats_uri: "/haproxy_stats"
 haproxy_stats_user: "lupin-admin"
 haproxy_stats_password: "lupin9527"
+haproxy_have_dns_server: false
 
 runtime_sockets:
   containerd: /run/containerd/containerd.sock
