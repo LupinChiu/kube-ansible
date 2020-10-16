@@ -47,11 +47,11 @@ bootstrap_token: "{{ bootstrap_token_id }}.{{ bootstrap_token_secret }}"
 encryption_token: ZlR/e9hce4Q3qhfDShAY+rBM/hHtUOLFgCz5WK6wsmU=
 
 # Kubernetes extra addons
-enable_ingress: false
-enable_dashboard: false
-enable_logging: false
-enable_monitoring: false
-enable_metric_server: false
+# enable_ingress: false
+# enable_dashboard: true
+# enable_logging: false
+# enable_monitoring: false
+# enable_metric_server: false
 
 ingress_lb_address: "{{ vip_address }}"
 
