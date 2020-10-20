@@ -13,8 +13,8 @@ container_network: calico
 
 # 需調整vip ip - vip 指的是 api server 統一對外ip(未)
 # Kubernetes HA extra variables.
-vip_interface: ""
-vip_address: 10.0.1.180
+# vip_interface: ""
+# vip_address: 10.0.1.180
 
 # Kubernetes extra addons
 enable_ingress: true

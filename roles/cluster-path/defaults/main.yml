@@ -40,7 +40,9 @@ etcd_config_dir: /etc/etcd
 etcd_config_file: /etc/etcd/config.yml
 
 # container runtime paths
-docker_data_dir: /var/lib/docker
+container_folder: "/data/docker"
+container_exec_param: "-g {{ container_folder }}"
+docker_data_dir: "{% if container_folder != '' %}{{ container_folder }}{% else %}/var/lib/docker{% endif %}"
 docker_config_dir: /etc/docker
 docker_shim_dir: /var/lib/dockershim
 

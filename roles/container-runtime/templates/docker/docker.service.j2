@@ -4,7 +4,7 @@ After=network.target docker.socket
 
 [Service]
 Type=notify
-ExecStart={{ bin_dir }}/dockerd -H fd:// --containerd=/run/containerd/containerd.sock 
+ExecStart={{ bin_dir }}/dockerd -H fd:// --containerd=/run/containerd/containerd.sock {% if container_folder != '' %}{{ container_exec_param }}{% endif %}
 
 ExecReload=/bin/kill -s HUP $MAINPID
 Restart=on-failure
