@@ -1,26 +1,31 @@
 ---
 
-- name: Check kubelet SSL certificate key files
+
+- name: Check Kubernetes SSL certificate authority files
   stat:
-    path: "{{ kubelet }}"
+    path: "{{ pki_dir }}/{{ item.bare }}.pem"
+  with_items:
+    - { file: kubelet-csr.json, ca: ca, bare: kubelet }
   register: check_kubelet_ssl_file
 
 - name: Generate kubelet SSL certificate json files
-  when: not check_kubelet_ssl_file.stat.exists
+  when: check_kubelet_ssl_file and not item.stat.exists
   template:
     src: kubelet-csr.json.j2
-    dest: "{{ pki_dir }}/kubelet-csr.json"
+    dest: "{{ pki_dir }}/{{ item.item.file }}"
+  with_items: "{{ check_kubelet_ssl_file['results'] }}"
   register: gen_kubelet_json_file
 
 - name: Create kubelet SSL certificate key files
-  when: not check_kubelet_ssl_file.stat.exists
+  when: check_kubelet_ssl_file and not item.stat.exists
   shell: |
     {{ bin_dir }}/cfssl gencert \
-      -ca={{ pki_dir }}/ca.pem \
-      -ca-key={{ pki_dir }}/ca-key.pem \
-      -config={{ ca_config }} \
+      -ca={{ pki_dir }}/{{ item.item.ca }}.pem \
+      -ca-key={{ pki_dir }}/{{ item.item.ca }}-key.pem \
+      -config={{ cache_dir }}/{{ item.item.ca }}-config.json \
       -hostname="{{ ansible_fqdn }}" \
       -profile={{ cert_info_profile }} \
-      {{ pki_dir }}/kubelet-csr.json | \
-      {{ bin_dir }}/cfssljson -bare {{ pki_dir }}/kubelet
+      {{ pki_dir }}/{{ item.item.file }} | \
+      {{ bin_dir }}/cfssljson -bare {{ pki_dir }}/{{ item.item.bare }}
+  with_items: "{{ check_kubelet_ssl_file['results'] }}"
   register: create_kubelet_ssl_file

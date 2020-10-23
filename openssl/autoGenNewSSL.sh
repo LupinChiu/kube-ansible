@@ -92,4 +92,6 @@ openssl x509 -req -in ${targetFileName}.csr -CA ${sourceFileName}.pem -CAkey ${s
 
 cat ${targetFileName}.pem ${sourceFileName}-bundle.pem >> ${targetFileName}-bundle.pem
 
+cp ${targetFileName}.pem ${targetFileName}.crt
+
 echo "gen ssl finish. check folder:${targetDir}"

@@ -1,3 +1,8 @@
+``` sh
+ansible-playbook -i inventory/hosts.ini cluster.yml
+ansible-playbook -i inventory/hosts.ini addons.yml
+ansible-playbook -i inventory/hosts.ini reset-cluster.yml
+```
 
 * 要記得改以下的設定檔：
 ```

@@ -46,12 +46,27 @@
   run_once: true
   register: gen_json_files
 
+- name: Check SSL CA json config
+  stat:
+    path: "{{ cache_dir }}/{{ item.bare }}-config.json"
+  with_items:
+    - { bare: IM-CA }
+    - { bare: ca }
+    - { bare: front-proxy-ca }
+  register: check_k8s_ca_config
+
+- name: Generate SSL CA config
+  when: check_k8s_ca_config and not item.stat.exists
+  template: src=ca-config.json.j2 dest="{{ cache_dir }}/{{ item.item.bare }}-config.json"
+  with_items: "{{ check_k8s_ca_config['results'] }}"
+  register: gen_ca_config
+
 - name: Check Kubernetes SSL certificate authority files
   stat:
     path: "{{ pki_dir }}/{{ item.bare }}.pem"
   with_items:
-    - { file: ca-csr.json, bare: ca }
-    - { file: front-proxy-ca-csr.json, bare: front-proxy-ca }
+    - { file: ca-csr.json, ca: IM-CA, bare: ca }
+    - { file: front-proxy-ca-csr.json, ca: IM-CA, bare: front-proxy-ca }
   delegate_to: "{{ groups['masters'][0] }}"
   run_once: true
   register: check_ca_files
@@ -77,9 +92,9 @@
   when: check_ca_files and not item.stat.exists
   shell: |
     {{ bin_dir }}/cfssl gencert \
-    -ca={{ intermediate_ca }} \
-    -ca-key={{ intermediate_ca_key }} \
-    -config={{ ca_config }} \
+    -ca={{ intermediate_dir }}/{{ item.item.ca }}.pem \
+    -ca-key={{ intermediate_dir }}/{{ item.item.ca }}-key.pem \
+    -config={{ cache_dir }}/{{ item.item.ca }}-config.json \
     -profile=intermediate-ca \
     {{ pki_dir }}/{{ item.item.file }} | \
       {{ bin_dir }}/cfssljson -bare {{ pki_dir }}/{{ item.item.bare }}
@@ -118,7 +133,7 @@
     {{ bin_dir }}/cfssl gencert \
       -ca={{ pki_dir }}/{{ item.item.ca }}.pem \
       -ca-key={{ pki_dir }}/{{ item.item.ca }}-key.pem \
-      -config={{ ca_config }} \
+      -config={{ cache_dir }}/{{ item.item.ca }}-config.json \
       {% if item.item.hosts is defined -%}
       -hostname={{ item.item.hosts }} \
       {% endif -%}

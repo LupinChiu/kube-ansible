@@ -101,6 +101,10 @@
     - "{{ bin_dir }}/kubelet"
     - "{{ bin_dir }}/kubectl"
     - "{{ systemd_service_dir }}/kubelet.service"
+    - "{{ cache_dir }}/IM-CA-config.json"
+    - "{{ cache_dir }}/ca-config.json"
+    - "{{ cache_dir }}/front-proxy-ca-config.json"
+    - "{{ cache_dir }}/etcd-ca-config.json"
   ignore_errors: True
 
 - name: Delete IP-in-IP tunnel

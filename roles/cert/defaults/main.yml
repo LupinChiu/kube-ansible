@@ -11,3 +11,5 @@ cert_info_locality: "New Taipei city"
 cert_info_org_uit: Kubernetes-ansible
 cert_info_expiry: 87600h
 cert_info_profile: kubernetes
+
+cert_issue_url: "http://pki.urad.local/ssl-repository"

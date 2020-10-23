@@ -27,6 +27,7 @@ extensions 這裡指的是要使用 extfile 內的什麼 session
 ```sh
 openssl req -text -noout -nodes -in ./udream-local/udream-local.csr
 openssl x509 -text -noout -nocert -in ./udream-local/udream-local.pem
+openssl s_client -showcerts -connect www.example.com:443
 ```
 
 

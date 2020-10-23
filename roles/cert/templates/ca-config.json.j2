@@ -1,7 +1,10 @@
 {
   "signing": {
     "default": {
-      "expiry": "{{ cert_info_expiry }}"
+      "expiry": "{{ cert_info_expiry }}",
+      "issuer_urls": [
+        "{{ cert_issue_url }}/{{ item.item.bare }}.pem"
+      ]
     },
     "profiles": {
       "{{ cert_info_profile }}": {
@@ -13,7 +16,10 @@
           "server auth",
           "client auth"
         ],
-        "expiry": "{{ cert_info_expiry }}"
+        "expiry": "{{ cert_info_expiry }}",
+        "issuer_urls": [
+          "{{ cert_issue_url }}/{{ item.item.bare }}.pem"
+        ]
       },
       "intermediate-ca": {
         "usages": [
@@ -29,7 +35,10 @@
         "ca_constraint": {
           "is_ca": true
         },
-        "expiry": "{{ cert_info_expiry }}"
+        "expiry": "{{ cert_info_expiry }}",
+        "issuer_urls": [
+          "{{ cert_issue_url }}/{{ item.item.bare }}.pem"
+        ]
       },
       "intermediate-ca-EndPath": {
         "usages": [
@@ -47,7 +56,10 @@
           "max_path_len": 0,
           "max_path_len_zero": true
         },
-        "expiry": "{{ cert_info_expiry }}"
+        "expiry": "{{ cert_info_expiry }}",
+        "issuer_urls": [
+          "{{ cert_issue_url }}/{{ item.item.bare }}.pem"
+        ]
       }
     }
   }
