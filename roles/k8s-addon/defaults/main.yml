@@ -15,10 +15,11 @@ addons:
     directories:
       - istio
     templates:
-      - istio/istio-sa.yml
-      - istio/istio-rbac.yml
-      - istio/istio-cm.yml
-      - istio/istio-ds.yml
+      - istio/istio-demo.yml
+      # - istio/istio-sa.yml
+      # - istio/istio-rbac.yml
+      # - istio/istio-cm.yml
+      # - istio/istio-ds.yml
   kubedns:
     name: kube-dns
     directories:
