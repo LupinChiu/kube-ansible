@@ -68,11 +68,6 @@ spec:
         - name: varlibdockercontainers
           mountPath: /var/lib/docker/containers
           readOnly: true
-        - name: libsystemddir
-          mountPath: /host/lib
-          readOnly: true
-        - name: config-volume
-          mountPath: /etc/fluent/config.d
       terminationGracePeriodSeconds: 30
       volumes:
       - name: varlog
@@ -81,9 +76,3 @@ spec:
       - name: varlibdockercontainers
         hostPath:
           path: {{ docker_data_dir }}/containers
-      - name: libsystemddir
-        hostPath:
-          path: /usr/lib64
-      - name: config-volume
-        configMap:
-          name: fluentd-es-config
