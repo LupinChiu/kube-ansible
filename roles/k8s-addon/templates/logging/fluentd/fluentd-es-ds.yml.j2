@@ -17,6 +17,8 @@ spec:
         k8s-app: fluentd-logging
         version: v1
     spec:
+      serviceAccount: fluentd
+      serviceAccountName: fluentd
       tolerations:
       - key: node-role.kubernetes.io/master
         effect: NoSchedule
@@ -24,9 +26,9 @@ spec:
       - name: fluentd
         image: fluent/fluentd-kubernetes-daemonset:v1-debian-elasticsearch
         env:
-          - name:  FLUENT_ELASTICSEARCH_HOST
+          - name: FLUENT_ELASTICSEARCH_HOST
             value: "elasticsearch-logging"
-          - name:  FLUENT_ELASTICSEARCH_PORT
+          - name: FLUENT_ELASTICSEARCH_PORT
             value: "9200"
           - name: FLUENT_ELASTICSEARCH_SCHEME
             value: "http"
@@ -50,12 +52,15 @@ spec:
           - name: KUBERNETES_SERVICE_PORT
             value: "{{ lb_secure_port }}"
           {% endif -%}
+          # KUBERNETES_CA_FILE 是用來驗證 apiserver ssl 是否可信任，若不設定永遠會驗證失敗
+          - name: KUBERNETES_CA_FILE
+            value: "/etc/ssl/certs/ca-certificates.crt"
           # Logz.io Authentication
           # ======================
-          - name: LOGZIO_TOKEN
-            value: "ThisIsASuperLongToken"
-          - name: LOGZIO_LOGTYPE
-            value: "kubernetes"
+          # - name: LOGZIO_TOKEN
+          #   value: "ThisIsASuperLongToken"
+          # - name: LOGZIO_LOGTYPE
+          #   value: "kubernetes"
         resources:
           limits:
             memory: 200Mi
@@ -73,6 +78,10 @@ spec:
           readOnly: true
         - name: config-volume
           mountPath: /etc/fluent/config.d
+        # KUBERNETES_CA_FILE 使用前需要先 ImportSSL.sh (將自簽憑證更新至 Host 機器上)
+        - name: ssl-ca-trust
+          mountPath: /etc/ssl/certs/ca-certificates.crt
+          readOnly: true
       terminationGracePeriodSeconds: 30
       volumes:
       - name: varlog
@@ -87,3 +96,6 @@ spec:
       - name: config-volume
         configMap:
           name: fluentd-es-config
+      - name: ssl-ca-trust
+        hostPath:
+          path: /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
