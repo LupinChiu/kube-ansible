@@ -62,9 +62,9 @@ pki_dir: /etc/kubernetes/pki
 etcd_pki_dir: "{{ pki_dir }}/etcd"
 intermediate_dir: "{{ pki_dir }}/intermediate"
 
-intermediate_ca: "{{ intermediate_dir }}/IM-CA.{{ cert_file_ext }}"
-intermediate_ca_key: "{{ intermediate_dir }}/IM-CA-key.{{ cert_key_ext }}"
-intermediate_ca_bundle: "{{ intermediate_dir }}/IM-CA-bundle.{{ cert_file_ext }}"
+intermediate_ca: "{{ intermediate_dir }}/K8S-IM-CA.{{ cert_file_ext }}"
+intermediate_ca_key: "{{ intermediate_dir }}/K8S-IM-CA-key.{{ cert_key_ext }}"
+intermediate_ca_bundle: "{{ intermediate_dir }}/K8S-IM-CA-bundle.{{ cert_file_ext }}"
 ca: "{{ pki_dir }}/ca.{{ cert_file_ext }}"
 ca_key: "{{ pki_dir }}/ca-key.{{ cert_key_ext }}"
 etcd_ca: "{{ etcd_pki_dir }}/etcd-ca.{{ cert_file_ext }}"
