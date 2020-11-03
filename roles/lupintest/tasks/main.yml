@@ -3,3 +3,9 @@
 - name: check host info
   debug:
     msg: "HostName: {{ ansible_hostname }}  nodeName:{{ ansible_nodename }}  domainName:{{ ansible_domain }} FQDN:{{ ansible_fqdn }}"
+
+- name: Move cfssl kubernetes cert file ext name
+  when: cert_file_ext != "pem"
+  command: "mv {{ pki_dir }}/apiserver.pem {{ pki_dir }}/apiserver.{{ cert_file_ext }}"
+  register: mv_kubernetes_ssl_file
+  ignore_errors: True

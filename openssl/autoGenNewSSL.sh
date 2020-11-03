@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 function help_msg() {
     echo "example:"
@@ -11,6 +11,20 @@ function help_msg() {
     echo "-d 參數為 .conf 要使用的 distinguished_name session , 預設為 normal_end_use"
     exit 0
 }
+
+source ./define.sh
+if [ -z ${entry_domain} ]; then 
+    entry_domain=pki.urad.local
+fi
+if [ -z ${entryPath} ]; then 
+    entryPath=ssl-repository
+fi
+if [ -z ${cert_ext_name} ]; then 
+    cert_ext_name="pem"
+fi
+if [ -z ${key_ext_name} ]; then 
+    key_ext_name="pem"
+fi
 
 extSession="end_use"
 dnSession="normal_end_use"
@@ -35,8 +49,7 @@ if [ -z $_SignerName ]; then
     exit 1
 fi
 
-sslFileSavePlace="http:\/\/pki.urad.local\/ssl-repository\/"
-#sslFileSavePlace="http:\/\/pki.urad.com.tw\/ssl-repository\/"
+sslFileSavePlace="http:\/\/$entry_domain\/$entryPath\/"
 exePath=$(dirname "$0")
 curPath=$(pwd)
 
@@ -62,20 +75,20 @@ sed -i "s/###dn###/${dnSession}/g" ${targetFileName}.conf
 
 # change ca path
 echo "changing ssl ca path."
-sed -i "s/###sslcapath###/${sslFileSavePlace}${_SignerName}.crt/g" ${targetFileName}.conf
+sed -i "s/###sslcapath###/${sslFileSavePlace}${_SignerName}.${cert_ext_name}/g" ${targetFileName}.conf
 
 echo "setting openssl ext param."
 #opensslExtParam="-extensions ${extSession} -extfile ${targetFileName}.ext"
 opensslExtParam="-extensions ${extSession} -extfile ${targetFileName}.conf"
 
 # start gen key
-if [ ! -f ${targetFileName}-key.pem ]; then
-    echo "start gen ${targetFileName}-key.pem & ${targetFileName}.csr"
-    openssl req -sha256 -utf8 -nodes -newkey rsa:2048 -keyout ${targetFileName}-key.pem -out ${targetFileName}.csr -config ${targetFileName}.conf
+if [ ! -f ${targetFileName}-key.${key_ext_name} ]; then
+    echo "start gen ${targetFileName}-key.${key_ext_name} & ${targetFileName}.csr"
+    openssl req -sha256 -utf8 -nodes -newkey rsa:2048 -keyout ${targetFileName}-key.${key_ext_name} -out ${targetFileName}.csr -config ${targetFileName}.conf
 fi
 
-if [ -f ${targetFileName}.pem ]; then
-    echo "${targetFileName}.pem is exist!"
+if [ -f ${targetFileName}.${cert_ext_name} ]; then
+    echo "${targetFileName}.${cert_ext_name} is exist!"
     exit 1
 fi
 
@@ -87,11 +100,12 @@ if [ ! -f ${sourceFileName}.serial ]; then
     echo "Add Create serial file param"
 fi
 
-openssl x509 -req -in ${targetFileName}.csr -CA ${sourceFileName}.pem -CAkey ${sourceFileName}-key.pem -out ${targetFileName}.pem \
+openssl x509 -req -in ${targetFileName}.csr -CA ${sourceFileName}.${cert_ext_name} -CAkey ${sourceFileName}-key.${key_ext_name} -out ${targetFileName}.${cert_ext_name} \
 -CAserial ${sourceFileName}.serial ${addSerialParam} -days 720 ${opensslExtParam}
 
-cat ${targetFileName}.pem ${sourceFileName}-bundle.pem >> ${targetFileName}-bundle.pem
+cat ${targetFileName}.${cert_ext_name} ${sourceFileName}-bundle.${cert_ext_name} >> ${targetFileName}-bundle.${cert_ext_name}
 
-cp ${targetFileName}.pem ${targetFileName}.crt
+# cp ${targetFileName}.pem ${targetFileName}.crt
+# cp ${targetFileName}-bundle.pem ${targetFileName}-bundle.crt
 
 echo "gen ssl finish. check folder:${targetDir}"

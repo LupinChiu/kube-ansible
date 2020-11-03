@@ -3,7 +3,7 @@
 
 - name: Check Kubernetes SSL certificate authority files
   stat:
-    path: "{{ pki_dir }}/{{ item.bare }}.pem"
+    path: "{{ pki_dir }}/{{ item.bare }}.{{ cert_file_ext }}"
   with_items:
     - { file: kubelet-csr.json, ca: ca, bare: kubelet }
   register: check_kubelet_ssl_file
@@ -20,12 +20,19 @@
   when: check_kubelet_ssl_file and not item.stat.exists
   shell: |
     {{ bin_dir }}/cfssl gencert \
-      -ca={{ pki_dir }}/{{ item.item.ca }}.pem \
-      -ca-key={{ pki_dir }}/{{ item.item.ca }}-key.pem \
-      -config={{ cache_dir }}/{{ item.item.ca }}-config.json \
-      -hostname="{{ ansible_fqdn }}" \
-      -profile={{ cert_info_profile }} \
-      {{ pki_dir }}/{{ item.item.file }} | \
-      {{ bin_dir }}/cfssljson -bare {{ pki_dir }}/{{ item.item.bare }}
+    -ca={{ pki_dir }}/{{ item.item.ca }}.{{ cert_file_ext }} \
+    -ca-key={{ pki_dir }}/{{ item.item.ca }}-key.{{ cert_key_ext }} \
+    -config={{ cache_dir }}/{{ item.item.ca }}-config.json \
+    -hostname="{{ ansible_fqdn }}" \
+    -profile={{ cert_info_profile }} \
+    {{ pki_dir }}/{{ item.item.file }} | \
+    {{ bin_dir }}/cfssljson -bare {{ pki_dir }}/{{ item.item.bare }}
   with_items: "{{ check_kubelet_ssl_file['results'] }}"
   register: create_kubelet_ssl_file
+
+- name: Move cfssl kubelet cert file ext name
+  when: check_kubelet_ssl_file and not item.stat.exists and cert_file_ext != "pem"
+  command: "mv {{ pki_dir }}/{{ item.item.bare }}.pem {{ pki_dir }}/{{ item.item.bare }}.{{ cert_file_ext }}"
+  with_items: "{{ check_kubelet_ssl_file['results'] }}"
+  register: mv_kubelet_ssl_file
+  ignore_errors: True

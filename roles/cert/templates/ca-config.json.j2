@@ -3,7 +3,7 @@
     "default": {
       "expiry": "{{ cert_info_expiry }}",
       "issuer_urls": [
-        "{{ cert_issue_url }}/{{ item.item.bare }}.pem"
+        "{{ cert_issue_url }}/{{ item.item.bare }}.{{ cert_file_ext }}"
       ]
     },
     "profiles": {
@@ -18,7 +18,7 @@
         ],
         "expiry": "{{ cert_info_expiry }}",
         "issuer_urls": [
-          "{{ cert_issue_url }}/{{ item.item.bare }}.pem"
+          "{{ cert_issue_url }}/{{ item.item.bare }}.{{ cert_file_ext }}"
         ]
       },
       "intermediate-ca": {
@@ -37,7 +37,7 @@
         },
         "expiry": "{{ cert_info_expiry }}",
         "issuer_urls": [
-          "{{ cert_issue_url }}/{{ item.item.bare }}.pem"
+          "{{ cert_issue_url }}/{{ item.item.bare }}.{{ cert_file_ext }}"
         ]
       },
       "intermediate-ca-EndPath": {
@@ -58,7 +58,7 @@
         },
         "expiry": "{{ cert_info_expiry }}",
         "issuer_urls": [
-          "{{ cert_issue_url }}/{{ item.item.bare }}.pem"
+          "{{ cert_issue_url }}/{{ item.item.bare }}.{{ cert_file_ext }}"
         ]
       }
     }

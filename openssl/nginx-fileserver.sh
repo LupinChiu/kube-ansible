@@ -1,8 +1,21 @@
-#! /bin/bash
+#!/usr/bin/env bash
 # http://terrychen.logdown.com/posts/2015/10/04/nginx-http-file-server
 # http://pki.urad.local => 10.0.1.154
 
-entry_domain=pki.urad.local
+source ./define.sh
+if [ -z ${entry_domain} ]; then 
+    entry_domain=pki.urad.local
+fi
+if [ -z ${entryPath} ]; then 
+    entryPath=ssl-repository
+fi
+if [ -z ${cert_ext_name} ]; then 
+    cert_ext_name="pem"
+fi
+if [ -z ${key_ext_name} ]; then 
+    key_ext_name="pem"
+fi
+
 entry_port=80
 proxy_target=127.0.0.1
 proxy_port=8081
@@ -12,7 +25,7 @@ githubPwd=ptUuTPt59Z8ADu4
 fileserverBasePath=/data/pki-ssl
 fileserverPath=${fileserverBasePath}/files
 fileserverConfigPath=${fileserverBasePath}/config
-mkdir -p $fileserverPath/ssl-repository
+mkdir -p $fileserverPath/$entryPath
 mkdir -p $fileserverConfigPath
 
 if [ ! -d "${fileserverPath}/.nginx" ]; then
