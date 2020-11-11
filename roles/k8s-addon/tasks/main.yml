@@ -76,5 +76,5 @@
   run_once: true
   register: apply_addon
   until: apply_addon.rc == 0
-  retries: 10
+  retries: 1
   delay: 2
