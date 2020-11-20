@@ -129,7 +129,7 @@ spec:
             value: "sni-dnat"
         service:
           externalIPs:
-            - 10.0.1.180
+            - 10.0.1.179
           ports:
             - port: 15021
               targetPort: 15021
@@ -143,6 +143,9 @@ spec:
             - port: 15443
               targetPort: 15443
               name: tls
+            - port: 31400
+              targetPort: 31400
+              name: tcp
         hpaSpec:
           maxReplicas: 5
           minReplicas: 1
@@ -469,7 +472,7 @@ spec:
             mountPath: /etc/istio/ingressgateway-ca-certs
 
     sidecarInjectorWebhook:
-      enableNamespacesByDefault: false
+      enableNamespacesByDefault: true
       rewriteAppHTTPProbe: true
       injectLabel: istio-injection
       objectSelector:
