@@ -1,0 +1,12 @@
+FROM golang:1.15.5 as builder
+WORKDIR /go/src/echoservergo/
+COPY /EchoServerGo/main.go .
+RUN CGO_ENABLED=0 GOOS=linux go build -o echoservergo main.go
+
+
+FROM golang:1.15.5 as runner
+WORKDIR /bin/
+COPY --from=builder /go/src/echoservergo .
+ENTRYPOINT [ "/bin/echoservergo" ]
+CMD [ "8020" ]
+EXPOSE 8020

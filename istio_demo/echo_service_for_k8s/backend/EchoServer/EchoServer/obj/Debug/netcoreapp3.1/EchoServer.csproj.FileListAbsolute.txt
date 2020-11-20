@@ -1,0 +1,16 @@
+C:\Users\User\Documents\Projects\echo_service_for_k8s\backend\EchoServer\EchoServer\obj\Debug\netcoreapp3.1\EchoServer.csprojAssemblyReference.cache
+C:\Users\User\Documents\Projects\echo_service_for_k8s\backend\EchoServer\EchoServer\obj\Debug\netcoreapp3.1\EchoServer.AssemblyInfoInputs.cache
+C:\Users\User\Documents\Projects\echo_service_for_k8s\backend\EchoServer\EchoServer\obj\Debug\netcoreapp3.1\EchoServer.AssemblyInfo.cs
+C:\Users\User\Documents\Projects\echo_service_for_k8s\backend\EchoServer\EchoServer\obj\Debug\netcoreapp3.1\EchoServer.csproj.CoreCompileInputs.cache
+C:\Users\User\Documents\Projects\echo_service_for_k8s\backend\EchoServer\EchoServer\bin\Debug\netcoreapp3.1\EchoServer.exe
+C:\Users\User\Documents\Projects\echo_service_for_k8s\backend\EchoServer\EchoServer\bin\Debug\netcoreapp3.1\EchoServer.deps.json
+C:\Users\User\Documents\Projects\echo_service_for_k8s\backend\EchoServer\EchoServer\bin\Debug\netcoreapp3.1\EchoServer.runtimeconfig.json
+C:\Users\User\Documents\Projects\echo_service_for_k8s\backend\EchoServer\EchoServer\bin\Debug\netcoreapp3.1\EchoServer.runtimeconfig.dev.json
+C:\Users\User\Documents\Projects\echo_service_for_k8s\backend\EchoServer\EchoServer\bin\Debug\netcoreapp3.1\EchoServer.dll
+C:\Users\User\Documents\Projects\echo_service_for_k8s\backend\EchoServer\EchoServer\bin\Debug\netcoreapp3.1\EchoServer.pdb
+C:\Users\User\Documents\Projects\echo_service_for_k8s\backend\EchoServer\EchoServer\bin\Debug\netcoreapp3.1\Ninject.dll
+C:\Users\User\Documents\Projects\echo_service_for_k8s\backend\EchoServer\EchoServer\bin\Debug\netcoreapp3.1\SockNet.dll
+C:\Users\User\Documents\Projects\echo_service_for_k8s\backend\EchoServer\EchoServer\obj\Debug\netcoreapp3.1\EchoServer.csproj.CopyComplete
+C:\Users\User\Documents\Projects\echo_service_for_k8s\backend\EchoServer\EchoServer\obj\Debug\netcoreapp3.1\EchoServer.dll
+C:\Users\User\Documents\Projects\echo_service_for_k8s\backend\EchoServer\EchoServer\obj\Debug\netcoreapp3.1\EchoServer.pdb
+C:\Users\User\Documents\Projects\echo_service_for_k8s\backend\EchoServer\EchoServer\obj\Debug\netcoreapp3.1\EchoServer.genruntimeconfig.cache

@@ -1,0 +1,11 @@
+FROM mcr.microsoft.com/dotnet/sdk:3.1 as builder
+COPY ./EchoClientDonet/ .
+WORKDIR ./EchoClientDonet
+RUN dotnet publish
+
+FROM mcr.microsoft.com/dotnet/runtime:3.1 as runner
+COPY --from=builder ./EchoClientDonet/bin/Debug/netcoreapp3.1 ./bin/echoclientdonet
+WORKDIR ./bin/echoclientdonet
+ENTRYPOINT [ "dotnet", "EchoClientDonet.dll" ]
+CMD [ "tcp-echo-server.default.svc.cluster.local","8020","1000" ]
+EXPOSE 8020
