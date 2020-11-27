@@ -1,12 +1,3 @@
-<style>
-.red {
-    color:red
-}
-.orange {
-    color:orange
-}
-</style>
-
 # Istio 相關
 
 ## 目錄
