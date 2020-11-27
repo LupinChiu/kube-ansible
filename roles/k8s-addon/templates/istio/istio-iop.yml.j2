@@ -9,6 +9,7 @@ spec:
 
   # You may override parts of meshconfig by uncommenting the following lines.
   meshConfig:
+    accessLogFile: /dev/stdout
     defaultConfig:
       proxyMetadata: {}
     enablePrometheusMerge: false
@@ -48,7 +49,7 @@ spec:
 
     # Policy feature
     policy:
-      enabled: false
+      enabled: true
       k8s:
         hpaSpec:
           maxReplicas: 5
@@ -75,7 +76,7 @@ spec:
 
     # Telemetry feature
     telemetry:
-      enabled: false
+      enabled: true
       k8s:
         env:
           - name: POD_NAMESPACE
@@ -100,10 +101,10 @@ spec:
         replicaCount: 1
         resources:
           requests:
-            cpu: 1000m
+            cpu: 200m
             memory: 1G
           limits:
-            cpu: 4800m
+            cpu: 400m
             memory: 4G
         strategy:
           rollingUpdate:
@@ -241,6 +242,8 @@ spec:
   # Please keep this in sync with manifests/charts/global.yaml
   values:
     global:
+      outboundTrafficPolicy:
+        mode: REGISTRY_ONLY
       istioNamespace: istio-system
       istiod:
         enabled: true
@@ -615,7 +618,6 @@ spec:
         private_key_file: /kiali-cert/key.pem
       service:
         annotations: {}
-
     # TODO: derive from operator API
     version: ""
     clusterResources: true
