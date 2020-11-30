@@ -1,0 +1,72 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: mysql
+spec:
+  hosts:
+  - sample.db
+  ports:
+  - number: 3308
+    name: tcp
+    protocol: TCP
+  resolution: STATIC
+  location: MESH_EXTERNAL
+  endpoints:
+  - address: 10.0.1.101
+---
+# apiVersion: networking.istio.io/v1alpha3
+# kind: Gateway
+# metadata:
+#   name: istio-egressgateway-mysql
+# spec:
+#   selector:
+#     istio: egressgateway
+#   servers:
+#   - port:
+#       number: 3308
+#       name: tcp
+#       protocol: TCP
+#     hosts:
+#     - 10.0.1.101
+# ---
+# apiVersion: networking.istio.io/v1alpha3
+# kind: DestinationRule
+# metadata:
+#   name: egressgateway-for-mysql-dr
+# spec:
+#   host: istio-egressgateway.istio-system.svc.cluster.local
+#   subsets:
+#   - name: mysql
+# ---
+# apiVersion: networking.istio.io/v1alpha3
+# kind: VirtualService
+# metadata:
+#   name: direct-mysql-through-egress-gateway
+# spec:
+#   hosts:
+#   - 10.0.1.101
+#   gateways:
+#   - istio-egressgateway-mysql
+#   - mesh
+#   tcp:
+#   - match:
+#     - gateways:
+#       - mesh
+#       port: 3308
+#     route:
+#     - destination:
+#         host: istio-egressgateway.istio-system.svc.cluster.local
+#         subset: mysql
+#         port:
+#           number: 3308
+#       weight: 100
+#   - match:
+#     - gateways:
+#       - istio-egressgateway
+#       port: 3308
+#     route:
+#     - destination:
+#         host: 10.0.1.101
+#         port:
+#           number: 3308
+#       weight: 100
