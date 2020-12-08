@@ -25,6 +25,9 @@ func (cf ContentFactory) Create(config conf.Conf) IContent {
 		}
 	case "https":
 	case "grpc":
+		content = &Grpc{
+			config: config,
+		}
 	}
 	return content
 }

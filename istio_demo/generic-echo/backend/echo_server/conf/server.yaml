@@ -4,7 +4,7 @@ tcp:
   port: :31400
 http:
   name: http
-  enable: true
+  enable: false
   port: :8033
 https:
   name: https
@@ -12,8 +12,8 @@ https:
   port: :8093
 grpc:
   name: grpc
-  enable: false
-  port: :31402
+  enable: true
+  port: :31400
 db:
   external: true
   host: 10.0.1.101:3308

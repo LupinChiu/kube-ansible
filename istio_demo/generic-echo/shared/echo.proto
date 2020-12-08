@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option go_package = ".;proto";
+package proto;
+
+message EchoReq {
+    string datetime = 1;
+}
+
+message EchoRes {
+    string name = 1;
+    string datetime = 2;
+}
+
+service Echo {
+    rpc Send(EchoReq) returns (EchoRes) {}
+}
