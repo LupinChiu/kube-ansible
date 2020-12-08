@@ -610,3 +610,4 @@ metadata:
   labels:
     istio-injection: enabled
 ```
+2. grpc sample，這邊將 istio-ingressgateway 新增 grpc 接口 31402:31666，Gateway 物件則以 31666 監聽，藉以測試路由；故若從外部啟動 client 並發起請求，須將 port 設為 31402。
