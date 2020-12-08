@@ -1,0 +1,115 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: generic-echo-client
+data:
+  CONF: |
+    tcp:
+      name: tcp
+      enable: false
+      host: echo-server.default.svc.local:31400
+      interval: 1 #ms
+    http:
+      name: http
+      enable: true
+      host: http://generic-echo-server-svc.default.svc.cluster.local:8033/echo
+      interval: 1 #ms
+    https:
+      name: https
+      enable: false
+      host: echo-server.default.svc.local:8034
+      interval: 1 #ms
+    grpc:
+      name: grpc
+      enable: false
+      host: echo-server.default.svc.local:8022
+      interval: 1 #ms
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: generic-echo-client-v1
+  labels:
+    app: generic-echo-client
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: generic-echo-client
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: generic-echo-client
+        version: v1
+    spec:
+      containers:
+      - name: generic-echo-client
+        image: docker.io/whitewalker0506/generic_echo_client:2.0.0
+        imagePullPolicy: IfNotPresent
+        # env:
+        # - name: CLIENT_CONF
+        #   valueFrom:
+        #     configMapKeyRef:
+        #       name: client-conf
+        #       key: client.yaml
+        # args: [ "-c", $(CLIENT_CONF) ]
+        args: ["-c", "/etc/generic-client/conf"]
+        ports:
+        - containerPort: 8035
+        volumeMounts:
+        - name: client-conf
+          mountPath: /etc/generic-client
+      volumes:
+      - name : client-conf
+        configMap:
+          name: generic-echo-client
+          items:
+          - key: CONF
+            path: conf
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: generic-echo-client-v2
+  labels:
+    app: generic-echo-client
+    version: v2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: generic-echo-client
+      version: v2
+  template:
+    metadata:
+      labels:
+        app: generic-echo-client
+        version: v2
+    spec:
+      containers:
+      - name: generic-echo-client
+        image: docker.io/whitewalker0506/generic_echo_client:2.0.3
+        imagePullPolicy: IfNotPresent
+        # env:
+        # - name: CLIENT_CONF
+        #   valueFrom:
+        #     configMapKeyRef:
+        #       name: client-conf
+        #       key: client.yaml
+        # args: [ "-c", $(CLIENT_CONF) ]
+        args: ["-c", "/etc/generic-client/conf"]
+        ports:
+        - containerPort: 8035
+        volumeMounts:
+        - name: client-conf
+          mountPath: /etc/generic-client
+      volumes:
+      - name : client-conf
+        configMap:
+          name: generic-echo-client
+          items:
+          - key: CONF
+            path: conf
+---
