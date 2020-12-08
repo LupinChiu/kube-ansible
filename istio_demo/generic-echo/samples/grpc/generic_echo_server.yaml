@@ -1,0 +1,254 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: generic-echo-server-cm1
+data:
+  CONF: |
+    tcp:
+      name: tcp
+      enable: false
+      port: :31400
+    http:
+      name: http
+      enable: false
+      port: :8033
+    https:
+      name: https
+      enable: false
+      port: :8093
+    grpc:
+      name: grpc
+      enable: true
+      port: :31400
+    db:
+      external: true
+      host: 10.0.1.101:3308
+      user: root
+      passwd: 1234
+      type: mysql
+      db: arpg
+      hardcodedelay: 0
+      conn:
+        maxidle: 50
+        maxopen: 120
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: generic-echo-server-cm2
+data:
+  CONF: |
+    tcp:
+      name: tcp
+      enable: false
+      port: :31400
+    http:
+      name: http
+      enable: false
+      port: :8033
+    https:
+      name: https
+      enable: false
+      port: :8093
+    grpc:
+      name: grpc
+      enable: true
+      port: :31400
+    db:
+      external: true
+      host: 10.0.1.101:3308
+      user: root
+      passwd: 1234
+      type: mysql
+      db: arpg
+      hardcodedelay: 0
+      conn:
+        maxidle: 50
+        maxopen: 120
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: generic-echo-server-svc
+spec:
+  ports:
+  - name: grpc
+    protocol: TCP
+    port: 31400
+  selector:
+    app: generic-echo-server
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: generic-echo-server-v1
+  labels:
+    app: generic-echo-server
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: generic-echo-server
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: generic-echo-server
+        version: v1
+    spec:
+      containers:
+      - name: generic-echo-server-v1
+        image: docker.io/whitewalker0506/generic_echo_server:3.0.2
+        imagePullPolicy: IfNotPresent
+        args: ["-c", "/etc/generic-server/conf"]
+        ports:
+        - containerPort: 31400
+        volumeMounts:
+        - name: server-conf
+          mountPath: /etc/generic-server
+      volumes:
+      - name : server-conf
+        configMap:
+          name: generic-echo-server-cm1
+          items:
+          - key: CONF
+            path: conf
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: generic-echo-server-v2
+  labels:
+    app: generic-echo-server
+    version: v2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: generic-echo-server
+      version: v2
+  template:
+    metadata:
+      labels:
+        app: generic-echo-server
+        version: v2
+    spec:
+      containers:
+      - name: generic-echo-server
+        image: docker.io/whitewalker0506/generic_echo_server:3.0.2
+        imagePullPolicy: IfNotPresent
+        args: ["-c", "/etc/generic-server/conf"]
+        ports:
+        - containerPort: 31400
+        volumeMounts:
+        - name: server-conf
+          mountPath: /etc/generic-server
+      volumes:
+      - name : server-conf
+        configMap:
+          name: generic-echo-server-cm2
+          items:
+          - key: CONF
+            path: conf
+---
+# 設定鎔斷機制
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: generic-echo-server-dr
+spec:
+  host: generic-echo-server-svc.default.svc.cluster.local
+  subsets:
+  - name: v1
+    labels:
+      version: v1
+    trafficPolicy:
+      loadBalancer:
+        simple: ROUND_ROBIN
+      connectionPool:
+        tcp:
+          maxConnections: 1
+        http:
+          http1MaxPendingRequests: 1
+          maxRequestsPerConnection: 1
+      outlierDetection:
+        consecutiveErrors: 1
+        interval: 1s
+        baseEjectionTime: 3m
+        maxEjectionPercent: 100
+  - name: v2
+    labels:
+      version: v2
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: generic-echo-server-gateway
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 31666
+      name: grpc
+      protocol: GRPC
+    hosts:
+    - "generic-echo-server-svc.default.svc.cluster.local"
+    - 10.0.1.179
+---
+# dispatch by version, 指定其他 gateway 後，需要顯性指定 mesh gateway 才會對 mesh 內部的流量作控管
+# hosts 就是提供給客戶端連線的位置，與 gateway 匹配
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: generic-echo-vsvc
+spec:
+  hosts: 
+  - "generic-echo-server-svc.default.svc.cluster.local"
+  - 10.0.1.179
+  gateways:
+  - generic-echo-server-gateway
+  - mesh
+  http:
+  - match:
+    - gateways:
+      - generic-echo-server-gateway
+    route:
+      - destination:
+          host: generic-echo-server-svc.default.svc.cluster.local
+          subset: v1
+  - route:
+    - destination:
+        host: generic-echo-server-svc.default.svc.cluster.local
+        subset: v2
+      weight: 10
+    - destination:
+        host: generic-echo-server-svc.default.svc.cluster.local
+        subset: v1
+      weight: 90
+
+# Mirroring traffic to v2
+# v1 負責所有流量，且設定 respond timeout 10s，delay 0s sql 回傳時間
+# v2 負責從 v1 複製過來的流量
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: generic-echo-vsvc
+spec:
+  hosts: 
+  - "generic-echo-server-svc.default.svc.cluster.local"
+  - 10.0.1.179
+  gateways:
+  - generic-echo-server-gateway
+  - mesh
+  http:
+  - route:
+    - destination:
+        host: generic-echo-server-svc.default.svc.cluster.local
+        subset: v1
+    mirror:
+      host: generic-echo-server-svc.default.svc.cluster.local
+      subset: v2
+    mirror_percent: 100  
