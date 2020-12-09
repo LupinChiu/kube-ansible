@@ -30,18 +30,18 @@
 
 ## DestniationRule
 ### 與 k8s 的不同
-在 k8s 中，client 需要使用不同服務入口才可以存取多個不同服務；而 <span class=red>Istio 可以只使用一個服務入口</span>，Istio 透過流量的特徵來完成對後端服務的選擇。
+在 k8s 中，client 需要使用不同服務入口才可以存取多個不同服務；而**可以只使用一個服務入口**，Istio 透過流量的特徵來完成對後端服務的選擇。
 
 
 ### 欄位說明
 * host (required): 代表 k8s 的 service，或由一個 ServiceEntry 定義的外部服務；建議使用 FQDN。
-* trafficPolicy (optional): 流量策略；DestniationRule Level 和 Subset Level 皆可定義，<span class=red>Subset Level 會 override DestniationRule Level</span>。
+* trafficPolicy (optional): 流量策略；DestniationRule Level 和 Subset Level 皆可定義，**Subset Level 會 override DestniationRule Level**。
 * subsets (optional) : 使用標籤選擇器來定義不同子集；即可以用版本標籤來區別流量策略。
 
 ## VirtualService
 在沒有定義 VirtualService 的情況下，DestniationRule 的 subset 是沒有作用的；會依造 [kube-proxy](https://hackmd.io/@daemonbuu/S1lNp8Tcv) 的預設隨機行為進行存取。
 
-<span class=red>VirtualService 負責對流量進行判別和轉發。</span>
+**VirtualService 負責對流量進行判別和轉發。**
 
 ### 欄位說明
 * hosts : 一樣是針對 k8s 的 service，或由一個 ServiceEntry 定義的外部服務作服務；可以針對多個服務進行工作。 (白話其實是提供給 Client 呼叫的位置，與 Gateway 的 hosts 匹配)
@@ -261,7 +261,7 @@ spec:
 ```
 
 ### Egress
-出口，負責使 mesh 內的服務可以存取外部服務 (不在 mesh 內)；建議使用 ServiceEntry 的方式訪問外部服務，優點是<span class=red>不會丟失流量監控和控制特性</span>。
+出口，負責使 mesh 內的服務可以存取外部服務 (不在 mesh 內)；建議使用 ServiceEntry 的方式訪問外部服務，優點是**不會丟失流量監控和控制特性**。
 
 * 固定 IP 沒有提供 FQDN 的方式
 ``` yaml
@@ -516,8 +516,6 @@ spec:
     * enable: 是否啟用該 protocol 內容
     * port: 哪一個 port 監聽
 
-<span class=red>若全部啟用，會以優先讀到的順序為主。</span>
-
 * db:
     * external: 是否啟用連接外部 db
     * host: db IP or FQDN
@@ -567,8 +565,6 @@ data:
     * enable: 是否啟用該 protocol 內容
     * host: server IP or FQDN
     * interval: 多久發一次請求 (單位 s)
-
-<span class=red>若全部啟用，會以優先讀到的順序為主。</span>
 
 ``` yaml
 apiVersion: v1
