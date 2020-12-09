@@ -516,8 +516,6 @@ spec:
     * enable: 是否啟用該 protocol 內容
     * port: 哪一個 port 監聽
 
-**若全部啟用，會以優先讀到的順序為主。**
-
 * db:
     * external: 是否啟用連接外部 db
     * host: db IP or FQDN
