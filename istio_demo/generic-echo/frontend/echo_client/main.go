@@ -24,8 +24,7 @@ func init() {
 }
 
 func main() {
-	IFactory := &content.ContentFactory{}
-	IContent := IFactory.Create(config)
+	IContent := content.GetFactory().Create(config)
 	if IContent == nil {
 		panic("content is nil.")
 	}

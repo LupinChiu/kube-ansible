@@ -28,6 +28,7 @@ func (e *EchoSrv) Send(ctx context.Context, req *proto.EchoReq) (res *proto.Echo
 
 type Grpc struct {
 	config conf.Conf
+	name   string
 }
 
 func (g *Grpc) Start() {
@@ -46,5 +47,18 @@ func (g *Grpc) Start() {
 	if err := grpc.Serve(apiListener); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}
+}
 
+func (g *Grpc) GetName() string {
+	return g.name
+}
+
+func (g *Grpc) SetConf(in conf.Conf) {
+	g.config = in
+}
+
+func init() {
+	GetFactory().Add(&Grpc{
+		name: "grpc",
+	})
 }

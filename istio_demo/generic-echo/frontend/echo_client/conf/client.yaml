@@ -18,5 +18,6 @@ https:
 grpc:
   name: grpc
   enable: true
-  host: 10.0.1.179:31402
+  #host: 10.0.1.179:31402
+  host: localhost:31400
   interval: 1 #ms

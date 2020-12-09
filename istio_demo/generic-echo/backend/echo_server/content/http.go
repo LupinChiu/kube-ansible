@@ -14,6 +14,7 @@ var router = mux.NewRouter()
 
 type Http struct {
 	config conf.Conf
+	name   string
 }
 
 type echoHandler int
@@ -27,7 +28,6 @@ func (e echoHandler) ServeHTTP(response http.ResponseWriter, request *http.Reque
 
 func (h *Http) Start() {
 	var handler echoHandler
-	//router.HandleFunc("/echo", echoHandler)
 	http.Handle("/echo", handler)
 	fmt.Println("http server start.")
 	fmt.Println(h.config.Proto.Port)
@@ -38,4 +38,18 @@ func (h *Http) Start() {
 		WriteTimeout: 10 * time.Second,
 	}
 	srv.ListenAndServe()
+}
+
+func (h *Http) GetName() string {
+	return h.name
+}
+
+func (h *Http) SetConf(in conf.Conf) {
+	h.config = in
+}
+
+func init() {
+	GetFactory().Add(&Http{
+		name: "http",
+	})
 }

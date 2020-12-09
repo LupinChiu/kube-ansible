@@ -11,6 +11,7 @@ import (
 
 type Http struct {
 	config conf.Conf
+	name   string
 }
 
 func (h *Http) Start() {
@@ -35,4 +36,18 @@ func (h *Http) Start() {
 		fmt.Printf("%s\n", sitemap)
 		time.Sleep(time.Duration(h.config.Interval) * time.Second)
 	}
+}
+
+func (h *Http) GetName() string {
+	return h.name
+}
+
+func (h *Http) SetConf(in conf.Conf) {
+	h.config = in
+}
+
+func init() {
+	GetFactory().Add(&Http{
+		name: "http",
+	})
 }

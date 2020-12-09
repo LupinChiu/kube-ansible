@@ -34,7 +34,7 @@ func ConfParser(file string, in interface{}) (Conf, error) {
 		switch values[i].(type) {
 		case Protocol:
 			proto := values[i].(Protocol)
-			if proto.Enable == true {
+			if proto.Enable == true && (config.Proto == Protocol{}) {
 				config.Proto = proto
 			}
 		case Database:

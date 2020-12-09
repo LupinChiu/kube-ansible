@@ -12,6 +12,7 @@ import (
 
 type Grpc struct {
 	config conf.Conf
+	name   string
 }
 
 func (g *Grpc) Start() {
@@ -34,4 +35,18 @@ func (g *Grpc) Start() {
 		fmt.Printf("%v:%v\n", receive.Name, receive.Datetime)
 		time.Sleep(time.Duration(g.config.Interval) * time.Second)
 	}
+}
+
+func (g *Grpc) GetName() string {
+	return g.name
+}
+
+func (g *Grpc) SetConf(in conf.Conf) {
+	g.config = in
+}
+
+func init() {
+	GetFactory().Add(&Grpc{
+		name: "grpc",
+	})
 }

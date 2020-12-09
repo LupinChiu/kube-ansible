@@ -32,7 +32,7 @@ func ConfParser(file string, in interface{}) (Conf, error) {
 	for i := 0; i < configs.NumField(); i++ {
 		values[i] = configs.Field(i).Interface()
 		proto := values[i].(Conf)
-		if proto.Enable == true {
+		if proto.Enable == true && (config == Conf{}) {
 			config = proto
 		}
 	}
