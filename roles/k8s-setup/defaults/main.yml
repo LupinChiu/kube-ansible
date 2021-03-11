@@ -29,7 +29,7 @@ kubelet_bind_healthz_port: 10248
 kubelet_resolv_conf: /etc/resolv.conf
 
 # keepalived variables
-keepalived_virtual_ips: "'{{ vip_address }}', '10.0.1.179', '10.0.1.178'"
+keepalived_virtual_ips: "'{{ vip_address }}', '{{ vip_address_2 }}', '{{ vip_address_3 }}'"
 # keepalived_virtual_ips: "{{ vip_address }}"
 keepalived_unicast_peers: "{% for host in groups['masters'] %}{% if vip_interface != '' %}'{{ hostvars[host]['ansible_' + vip_interface].ipv4.address }}'{% else %}'{{ hostvars[host].ansible_default_ipv4.address }}'{% endif %}{% if not loop.last %},{% endif %}{% endfor %}"
 keepalived_password: "lupin-kubernetes-keepalive"

@@ -21,10 +21,13 @@ encryption_token -> 已修改
     1. haproxy_stats_user
     2. haproxy_stats_password
     3. haproxy_have_dns_server 如果有對應的 dns server 可以試著打開這個功能，否則會直接寫入 /etc/hosts 下，直接加入機器Ip 對應
+    
 ```
 * 除錯
   1. vip 的設定如果出問題，需要追查 keepalived 而不是 haproxy (設定檔已修正)
   2. haproxy 再次安裝仍然有出錯 (設定檔已修正)
+  3. selinux 要關 正是環境要去修改
+  4. hostname 每一台必須要不一樣 
 
 * 憑證相關需在執行前處理完成
   1. 需提前瞭解及使用 cfssl 簽出 中繼憑證 並進行相關測試
@@ -77,4 +80,5 @@ cat ./etcd/etcd.pem ./etcd/etcd-ca-chain.pem > ./etcd/etcd-chain.pem
 ```sh
 簡易指令：
 kubectl -n kubernetes-dashboard get sa admin-user -o json | grep \"secrets\" -A 5 | grep name | awk '{print $2} ' | xargs kubectl -n kubernetes-dashboard describe secrets
+kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboard get secret | grep admin-user | awk '{print $1}')
 ```

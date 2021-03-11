@@ -53,7 +53,7 @@
     - "{{ systemd_service_dir }}/containerd.service"
 
 - name: Stop containerd systemd service
-  systemd: name=containerd.service state=stopped enabled=no
+  systemd: name=containerd.service state=stopped enabled=no daemon_reload=yes
   ignore_errors: True
   register: stop_containerd_service
 
@@ -120,6 +120,7 @@
     - "flannel.1"
     - "cni0"
     - "tunl0"
+    - "kube-ipvs0"
   register: find_eths
   ignore_errors: True
 

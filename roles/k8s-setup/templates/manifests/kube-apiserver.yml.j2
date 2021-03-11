@@ -25,7 +25,7 @@ spec:
   priorityClassName: system-cluster-critical
   containers :
   - name: kube-apiserver
-    image: k8s.gcr.io/kube-apiserver-amd64:v{{ kube_version }}
+    image: k8s.gcr.io/kube-apiserver:v{{ kube_version }}
     command:
       - kube-apiserver
       - --v={{ log_level }}
@@ -46,6 +46,10 @@ spec:
       - --kubelet-client-certificate={{ apiserver }}
       - --kubelet-client-key={{ apiserver_key }}
       - --service-account-key-file={{ sa_public_key }}
+      - --service-account-signing-key-file={{ sa_private_key }}
+      - --service-account-issuer=https://kubernetes.default.svc.cluster.local
+
+
       - --requestheader-client-ca-file={{ front_ca }}
       - --proxy-client-cert-file={{ front_client }}
       - --proxy-client-key-file={{ front_client_key }}

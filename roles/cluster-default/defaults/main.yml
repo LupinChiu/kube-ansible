@@ -30,7 +30,9 @@ cluster_domain_name: cluster.local
 enable_keepalived: true
 enable_haproxy: true
 vip_interface: ""
-vip_address: 10.0.1.180
+vip_address: 10.0.1.238
+vip_address_2: 10.0.1.237
+vip_address_3: 10.0.1.239
 lb_secure_port: 8443
 lb_api_url: "https://{{ vip_address }}:{{ lb_secure_port }}"
 

@@ -13,7 +13,7 @@ spec:
   priorityClassName: system-cluster-critical
   containers:
   - name: kube-controller-manager
-    image: k8s.gcr.io/kube-controller-manager-amd64:v{{ kube_version }}
+    image: k8s.gcr.io/kube-controller-manager:v{{ kube_version }}
     command:
       - kube-controller-manager
       - --v={{ log_level }}
