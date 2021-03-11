@@ -1,0 +1,23 @@
+tcp:
+  name: tcp
+  enable: false
+  host: localhost:31400
+  interval: 1 #ms
+http:
+  name: http
+  enable: false
+  #host: http://generic-echo-server-svc.default.svc.cluster.local:8033/echo
+  host: http://10.0.1.179/echo
+  #host: http://localhost:8033/echo
+  interval: 1 #ms
+https:
+  name: https
+  enable: false
+  host: echo-server.default.svc.local:8034
+  interval: 1 #ms
+grpc:
+  name: grpc
+  enable: true
+  #host: 10.0.1.179:31402
+  host: localhost:31400
+  interval: 1 #ms

@@ -1,0 +1,8 @@
+# https://github.com/prometheus/blackbox_exporter/blob/master/blackbox.yml
+modules:
+  http_2xx:
+    prober: http
+  http_post_2xx:
+    prober: http
+    http:
+      method: POST

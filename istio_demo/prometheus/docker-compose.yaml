@@ -1,0 +1,77 @@
+services:
+  web:
+    build: ./frontend/
+    ports:
+      - "5000:5000"
+      #- "8089:8089"
+    volumes:
+      - .:/code # 把當前資料夾 mount 掛載進去 container，這樣你可以直接在本地端專案資料夾改動檔案，container 裡面的檔案也會更動也不用重新 build image！
+  locust:
+    image: locustio/locust
+    ports: 
+      - "8089:8089"
+    volumes: 
+      - ./:/mnt/locust
+    command: -f /mnt/locust/locustfile.py 
+    links:
+      - web
+  worker:
+    image: locustio/locust
+    volumes:
+      - ./:/mnt/locust
+    command: -f /mnt/locust/locustfile.py --worker --master-host locust
+    links:
+      - web
+  prometheus:
+    image: prom/prometheus:v2.25.0
+    volumes:
+      - ./prometheus.yaml:/etc/prometheus/prometheus.yaml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yaml'
+      # - '--web.external-url=/prometheus/'
+      # - '--web.route-prefix=/prometheus/'
+    ports:
+      - '9090:9090'
+  alertmanager:
+    image: prom/alertmanager
+    ports:
+      - 9093:9093
+    # volumes:
+    #   - ./alertmanager.yaml:/etc/alertmanager/alertmanager.yaml
+    restart: always
+    # command:
+    #   - '--config.file=/etc/alertmanager/alertmanager.yaml'
+      #- '--storage.path=/alertmanager'
+  grafana:
+    image: grafana/grafana
+    volumes:
+      #- ./grafana.ini:/etc/grafana/grafana.ini
+      - grafana_data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=pass
+      - GF_RENDERING_SERVER_URL=http://renderer:8081/render
+      - GF_RENDERING_CALLBACK_URL=http://grafana:3000/
+      - GF_LOG_FILTERS=rendering:debug
+      - GF_SERVER_ROOT_URL=%(protocol)s://%(domain)s:%(http_port)s/grafana
+      - GF_SERVER_SERVE_FROM_SUB_PATH=true
+    depends_on:
+      - prometheus
+    ports:
+      - '3000:3000'
+  renderer:
+    image: grafana/grafana-image-renderer:latest
+    ports:
+      - '8081:8081'
+  blackbox_exporter:
+    image: prom/blackbox-exporter
+    ports:
+      - "9115:9115"
+    # volumes:
+    #   - "./blackbox.yml:/etc/blackbox/blackbox.yml"
+    # command: 
+    #   - 'config.file=/etc/blackbox/blackbox.yml'
+    # depends_on:
+    #   - prometheus
+volumes:
+  prometheus_data: {}
+  grafana_data: {}

@@ -19,13 +19,11 @@ addons:
       - istio/istio-ns.yml
       - istio/istio-rbac.yml
       - istio/istio-sa.yml
-      # - istio/istio-dp.yml
       - istio/istio-svc.yml
+      - istio/istio-dp.yml
       - istio/istio-iop.yml
-      # - istio/istio-sa.yml
-      # - istio/istio-rbac.yml
-      # - istio/istio-cm.yml
-      # - istio/istio-ds.yml
+      - istio/prometheus.yml
+      #- istio/grafana.yml
   kubedns:
     name: kube-dns
     directories:
