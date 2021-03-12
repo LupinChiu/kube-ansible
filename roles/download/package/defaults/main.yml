@@ -10,11 +10,11 @@ base:
   etcd:
     url: "https://github.com"
 #    version: 3.3.12
-    version: 3.4.13
+    version: "{{ etcd_version }}"
   docker:
     url: "https://download.docker.com"
 #    version: 18.09.3
-    version: 19.03.9
+    version: "{{ docer_version }}"
   nvidia_docker:
     url: "https://github.com"
     version: 2.0.3
@@ -64,7 +64,7 @@ package:
     symlinks:
       - etcd
       - etcdctl
-    file: "etcd-v{{ base.etcd.version }}-linux-amd64.tar.gz"
+    file: "etcd-v{{ base.etcd.version }}-linux-amd64.tar"
   docker:
     name: docker
     dir: /opt/docker

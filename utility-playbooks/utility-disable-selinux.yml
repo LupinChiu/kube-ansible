@@ -1,0 +1,9 @@
+---
+# ansible-playbook -i inv_Dev_urAD utility-disable-selinux.yml -e var_host=all-servers
+
+- hosts: "{{ var_host }}"
+  become: true
+  roles:
+    - { role: utility-disable-SELinux, reboot: ture }
+
+

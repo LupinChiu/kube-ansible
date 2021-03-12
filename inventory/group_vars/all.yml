@@ -1,10 +1,12 @@
 ---
 # 需調整版本
-kube_version: 1.19.0
+kube_version: 1.20.4
+etcd_version: 3.4.15
 
 # Container runtime,
 # Supported: docker, nvidia-docker, containerd.
 container_runtime: docker
+docer_version: 19.03.9
 
 # Container network,
 # Supported: calico, flannel.
