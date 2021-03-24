@@ -4,9 +4,10 @@ kube_version: 1.20.4
 etcd_version: 3.4.15
 
 # Container runtime,
-# Supported: docker, nvidia-docker, containerd.
-container_runtime: docker
-docer_version: 19.03.9
+# Supported: docker, nvidia-docker, containerd, crio.
+container_runtime: crio
+docker_version: 19.03.9
+cri_o_version: 1.19.1
 
 # Container network,
 # Supported: calico, flannel.
@@ -29,3 +30,7 @@ enable_istio: false
 ansible_ssh_port: 22
 ansible_ssh_private_key_file: /K8S_Ansible/sshkey/urAD-Dev
 ansible_ssh_user: root
+
+vip_address: 10.130.0.238
+vip_address_2: 10.130.0.237
+vip_address_3: 10.130.0.239

@@ -1,0 +1,75 @@
+---
+- name: Ensure etcd PKI directory already exists
+  when: container_folder != ''
+  file: path={{ container_folder }} state=directory
+
+- name: Ensures /opt/cni/bin dir exists
+  ansible.builtin.file:
+    path: "/opt/cni/bin"
+    state: directory
+    mode: '0755'
+
+- name: Ensures /usr/local/share/oci-umount/oci-umount.d dir exists
+  ansible.builtin.file:
+    path: "/usr/local/share/oci-umount/oci-umount.d"
+    state: directory
+    mode: '0755'
+
+- name: Ensures /usr/local/lib/systemd/system dir exists
+  ansible.builtin.file:
+    path: "/usr/local/lib/systemd/system"
+    state: directory
+    mode: '0755'
+
+- name: Ensures /etc/crio dir exists
+  ansible.builtin.file:
+    path: "/etc/crio"
+    state: directory
+    mode: '0755'
+
+- name: Install crio
+  community.general.make:
+    chdir: "/opt/crio"
+    target: install
+  become: yes
+
+- name: Check cgroup file
+  stat: path=/etc/crio/crio.conf.d/02-cgroup-manager.conf
+  register: check_cgroup_conf
+
+- name: Ensures /etc/crio/crio.conf.d dir exists
+  ansible.builtin.file:
+    path: "/etc/crio/crio.conf.d"
+    state: directory
+    mode: '0755'
+
+- name: Write cgroup-manager.conf
+  when: not check_cgroup_conf.stat.exists
+  copy:
+    content: |
+      [crio.runtime]
+      conmon_cgroup = "pod"
+      cgroup_manager = "cgroupfs"
+    dest: "/etc/crio/crio.conf.d/02-cgroup-manager.conf"
+  register: copy_cgroup
+
+- name: Ensure registries config directory exists
+  file:
+    path: "/etc/containers"
+    state: directory
+
+- name: Copy registries.conf file
+  template:
+    src: "crio/registries.conf.j2"
+    dest: "/etc/containers/registries.conf"
+    mode: '0644'
+
+- name: Enable and restart CRI-O engine
+  systemd:
+    name: crio
+    daemon_reload: yes
+    state: restarted
+    enabled: yes
+  register: started_crio
+
+

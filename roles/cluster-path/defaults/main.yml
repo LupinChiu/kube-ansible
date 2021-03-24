@@ -45,6 +45,8 @@ container_exec_param: "-g {{ container_folder }}"
 docker_data_dir: "{% if container_folder != '' %}{{ container_folder }}{% else %}/var/lib/docker{% endif %}"
 docker_config_dir: /etc/docker
 docker_shim_dir: /var/lib/dockershim
+crio_config_dir: /etc/sysconfig/crio
+
 
 containerd_data_dir: /var/lib/containerd
 containerd_config_dir: /etc/containerd

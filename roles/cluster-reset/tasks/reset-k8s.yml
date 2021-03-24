@@ -14,6 +14,32 @@
   ignore_errors: True
   register: stop_docker_service
 
+- name: Stop crio all container
+  when: container_runtime == 'crio'
+  ansible.builtin.shell: "{{ item }}"
+  with_items:
+    - "crictl stop $(crictl ps -q)"
+    - "crictl rm $(crictl ps -a -q)"
+    - "rm -rf /etc/containers/registries.conf"
+  ignore_errors: True
+  register: stop_crio_container
+
+- name: Stop crio systemd service
+  when: container_runtime == 'crio'
+  systemd: name={{ item }} state=stopped enabled=no
+  with_items:
+    - crio.service
+  ignore_errors: True
+  register: stop_crio_service
+
+- name: Cleanup crio directories and binaries
+  when: stop_crio_service
+  community.general.make:
+    chdir: /opt/crio
+    target: uninstall
+  ignore_errors: True
+  become: yes
+
 - name: Cleanup container rutime directories and binaries
   when: stop_docker_service
   file: path="{{ item }}" state=absent

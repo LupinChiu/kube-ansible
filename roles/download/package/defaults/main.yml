@@ -11,10 +11,13 @@ base:
     url: "https://github.com"
 #    version: 3.3.12
     version: "{{ etcd_version }}"
+  crio:
+    url: "https://github.com"
+    version: "{{ cri_o_version }}"
   docker:
     url: "https://download.docker.com"
 #    version: 18.09.3
-    version: "{{ docer_version }}"
+    version: "{{ docker_version }}"
   nvidia_docker:
     url: "https://github.com"
     version: 2.0.3
@@ -39,6 +42,7 @@ base:
   cfssljson:
     url: "https://github.com/cloudflare/cfssl/releases/download/"
     version: 1.4.1
+
 
 package:
   kubectl:
@@ -81,6 +85,13 @@ package:
       - runc
       - ctr
     file: "docker-{{ base.docker.version }}.tgz"
+  crio:
+    name: crio
+    dir: /opt/crio
+    url: "{{ base.crio.url }}/cri-o/cri-o/releases/download/v{{ base.crio.version }}"
+    unarchive:
+      extra_opt: "['--strip-components=1']"
+    file: "crio-v{{ base.crio.version }}.tar.gz"
   nvidia_docker:
     name: nvidia-docker
     dir: /opt/nvidia-docker
@@ -144,7 +155,6 @@ package:
   cfssl:
     name: cfssl
     dir: /opt/cfssl
-
     url: "{{ base.cfssl.url }}/v{{ base.cfssl.version }}"
     symlinks:
       - cfssl

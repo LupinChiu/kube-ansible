@@ -9,7 +9,7 @@
 - name: Read the config files
   slurp: src={{ item.item }}
   with_items: "{{ check_files['results'] }}"
-#  delegate_to: "{{ groups['masters'][0] }}"
+  delegate_to: "{{ groups['masters'][0] }}"
   run_once: true
   register: read_files
 

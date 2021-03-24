@@ -35,6 +35,9 @@
     - { src: "manifests/kube-scheduler.yml", dest: "{{ manifest_dir }}/kube-scheduler.yml" }
     - { src: "manifests/kube-controller-manager.yml", dest: "{{ manifest_dir }}/kube-controller-manager.yml" }
 
+- name: Ensures {{ ansible_env.HOME }}/.kube dir exists
+  file: path={{ ansible_env.HOME }}/.kube state=directory
+
 - name: Copy Kubernetes admin config to home directory
   copy:
     src: "{{ admin_kubeconfig }}"

@@ -1,0 +1,14 @@
+{% if search_registries is defined %}
+[registries.search]
+registries = [{% for reg in search_registries %}"{{ reg }}"{% if not loop.last %}, {% endif %}{% endfor %}]
+{% endif %}
+
+{% if insecure_registries is defined %}
+[registries.insecure]
+registries = [{% for reg in insecure_registries %}"{{ reg }}"{% if not loop.last %}, {% endif %}{% endfor %}]
+{% endif %}
+
+{% if block_registries is defined %}
+[registries.block]
+registries = [{% for reg in block_registries %}"{{ reg }}"{% if not loop.last %}, {% endif %}{% endfor %}]
+{% endif %}

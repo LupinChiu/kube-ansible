@@ -15,7 +15,7 @@ container_runtime: docker
 # Supported: calico, flannel.
 cni_enable: true
 container_network: calico
-cni_iface: ""
+cni_iface: "ens.*,enp1s.*,eth.*"
 
 # Kubernetes cluster network
 pod_network_cidr: 10.244.0.0/16
@@ -30,9 +30,6 @@ cluster_domain_name: cluster.local
 enable_keepalived: true
 enable_haproxy: true
 vip_interface: ""
-vip_address: 10.0.1.238
-vip_address_2: 10.0.1.237
-vip_address_3: 10.0.1.239
 lb_secure_port: 8443
 lb_api_url: "https://{{ vip_address }}:{{ lb_secure_port }}"
 
@@ -71,8 +68,12 @@ kubeproxy_ipvs_scheduler: rr
 ###############
 # 這裡需要將私有docker registry 的資訊填入(未)
 # A list of the insecure registry you might need to define
-# insecure_registries:
+search_registries:
+  - 'docker.io'
+#insecure_registries:
 # - "192.168.2.9:5000"
+#block_registries:
+# - 'docker.io'
 
 # docker_opts:
 # - "HTTP_PROXY=http://proxy.example.com:80/"

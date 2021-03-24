@@ -23,7 +23,8 @@
   ignore_errors: True
   register: check_driver
 
-- include_tasks: containerd/main.yml
+- when: container_runtime != 'crio'
+  include_tasks: containerd/main.yml
 
 # nvidia-docker runtime
 - when:
@@ -34,6 +35,10 @@
 # docker runtime
 - when: container_runtime == 'docker' or container_runtime == 'nvidia-docker'
   include_tasks: docker/main.yml
+
+# cri-o runtime
+- when: container_runtime == 'crio'
+  include_tasks: crio/main.yml
 
 - name: Check sysctl k8s file
   stat: path=/etc/sysctl.d/99-k8s.conf
@@ -50,6 +55,16 @@
       net.ipv4.conf.all.arp_announce=2
     dest: /etc/sysctl.d/99-k8s.conf
   register: copy_sysctl
+
+- name: Add the overlay module
+  community.general.modprobe:
+    name: overlay
+    state: present
+
+- name: Add the br_netfilter module
+  community.general.modprobe:
+    name: br_netfilter
+    state: present
 
 - name: Enable bridge-netfilter and ip-forward system variables
   when: copy_sysctl

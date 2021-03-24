@@ -45,3 +45,4 @@ haproxy_have_dns_server: false
 
 runtime_sockets:
   containerd: /run/containerd/containerd.sock
+  crio: /var/run/crio/crio.sock
