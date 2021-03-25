@@ -27,6 +27,11 @@
     state: directory
     mode: '0755'
 
+- name: Install make
+  yum:
+    name: make
+    state: present
+
 - name: Install crio
   community.general.make:
     chdir: "/opt/crio"
@@ -63,6 +68,14 @@
     src: "crio/registries.conf.j2"
     dest: "/etc/containers/registries.conf"
     mode: '0644'
+
+- name: Turn on fs.may_detach_mounts
+  ansible.posix.sysctl:
+    name: fs.may_detach_mounts
+    value: '1'
+    state: present
+    reload: yes
+    sysctl_file : "/etc/sysctl.d/99-crio.conf"
 
 - name: Enable and restart CRI-O engine
   systemd:
