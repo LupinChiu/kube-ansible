@@ -222,7 +222,7 @@ spec:
 
   addonComponents:
     prometheus:
-      enabled: true
+      enabled: false
       k8s:
         replicaCount: 1
     kiali:
@@ -233,6 +233,11 @@ spec:
       enabled: true
       k8s:
         replicaCount: 1
+        env:
+        - name: GF_SERVER_ROOT_URL
+          value: '%(protocol)s://%(domain)s:%(http_port)s/grafana'
+        - name: GF_SERVER_SERVE_FROM_SUB_PATH
+          value: 'true'
     tracing:
       enabled: true
     istiocoredns:
@@ -484,11 +489,10 @@ spec:
 
     prometheus:
       hub: docker.io/prom
-      tag: v2.15.1
+      tag: v2.25.0
       retention: 6h
       scrapeInterval: 15s
       contextPath: /prometheus
-
       security:
         enabled: true
       nodeSelector: {}
@@ -500,7 +504,7 @@ spec:
     grafana:
       image:
         repository: grafana/grafana
-        tag: 6.7.4
+        tag: 7.4.3
       persist: false
       storageClassName: ""
       accessMode: ReadWriteMany
@@ -536,7 +540,6 @@ spec:
       tolerations: []
       podAntiAffinityLabelSelector: []
       podAntiAffinityTermLabelSelector: []
-      env: {}
       envSecrets: {}
 
     tracing:
