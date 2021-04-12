@@ -1,8 +1,8 @@
 ---
 
-- hosts: k8s-m3
-  gather_facts: true
+- hosts: hfs
+  # gather_facts: true
   roles:
     - { role: cluster-default }
     - { role: cluster-path }
-    - { role: lupintest }
+    - { role: lupintest, when: enable_scp_to_http_file_server }

@@ -29,9 +29,16 @@ cluster_domain_name: cluster.local
 # Kubernetes HA extra variables.
 enable_keepalived: true
 enable_haproxy: true
+
+vip_address_array: 
+  - 10.0.1.180
+  - 10.0.1.179
+  - 10.0.1.178
 vip_interface: ""
+vip_address: "{{ vip_address_array[0] }}"
+main_vip_address: "{{ vip_address_array[0] }}"
 lb_secure_port: 8443
-lb_api_url: "https://{{ vip_address }}:{{ lb_secure_port }}"
+lb_api_url: "https://{{ main_vip_address }}:{{ lb_secure_port }}"
 
 # etcd extra variables.
 etcd_iface: ""
@@ -52,9 +59,9 @@ encryption_token: ZlR/e9hce4Q3qhfDShAY+rBM/hHtUOLFgCz5WK6wsmU=
 # enable_monitoring: false
 # enable_metric_server: false
 
-ingress_lb_address: "{{ vip_address }}"
+ingress_lb_address: "{{ main_vip_address }}"
 
-monitoring_lb_address: "{{ vip_address }}"
+monitoring_lb_address: "{{ main_vip_address }}"
 monitoring_grafana_user: "admin"
 monitoring_grafana_password: "p@ssw0rd"
 

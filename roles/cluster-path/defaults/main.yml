@@ -56,7 +56,7 @@ libnvidia_header_file: /usr/local/include/nvc.h
 libnvidia_lib_dir: /usr/local/lib/libnvidia
 
 # cert paths
-cert_file_ext: "pem"
+cert_file_ext: "crt"
 cert_key_ext: "pem"
 
 ca_config: "{{ cache_dir }}/ca-config.json"
@@ -89,3 +89,26 @@ front_client: "{{ pki_dir }}/front-proxy-client.{{ cert_file_ext }}"
 front_client_key: "{{ pki_dir }}/front-proxy-client-key.{{ cert_key_ext }}"
 sa_public_key: "{{ pki_dir }}/sa.pub"
 sa_private_key: "{{ pki_dir }}/sa.key"
+ca_chain: "{{ pki_dir }}/ca-chain.{{ cert_file_ext }}"
+front_ca_chain: "{{ pki_dir }}/front-proxy-ca-chain.{{ cert_file_ext }}"
+etcd_ca_chain: "{{ etcd_pki_dir }}/etcd-ca-chain.{{ cert_file_ext }}"
+apiserver_chain: "{{ pki_dir }}/apiserver-chain.{{ cert_file_ext }}"
+
+# make ssl chain bundle
+chain_array:
+  - name: ca
+    from: "{{ intermediate_ca_bundle }}"
+    self: "{{ ca }}"
+    out_path: "{{ ca_chain }}"
+  - name: etcd_ca
+    from: "{{ intermediate_ca_bundle }}"
+    self: "{{ etcd_ca }}"
+    out_path: "{{ etcd_ca_chain }}"
+  - name: front_ca
+    from: "{{ intermediate_ca_bundle }}"
+    self: "{{ front_ca }}"
+    out_path: "{{ front_ca_chain }}"
+  - name: apiserver
+    from: "{{ ca_chain }}"
+    self: "{{ apiserver }}"
+    out_path: "{{ apiserver_chain }}"

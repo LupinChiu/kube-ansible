@@ -7,6 +7,7 @@ k8s-n1      ansible_ssh_host=10.0.1.151
 k8s-n2      ansible_ssh_host=10.0.1.152
 k8s-n3      ansible_ssh_host=10.0.1.153
 k8s-n4      ansible_ssh_host=10.0.1.154
+hfs-machine ansible_ssh_host=10.0.1.155
 
 [all-servers:vars]
 ansible_ssh_port=22
@@ -22,6 +23,7 @@ k8s-n1
 k8s-n2
 k8s-n3
 k8s-n4
+hfs-machine
 
 [etcds]
 k8s-m1
@@ -40,6 +42,9 @@ k8s-n1
 k8s-n2
 k8s-n3
 k8s-n4
+
+[hfs]
+hfs-machine
 
 [kube_cluster:children]
 masters

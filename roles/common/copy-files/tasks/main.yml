@@ -13,6 +13,13 @@
   run_once: true
   register: read_files
 
+- name: Ensure directory already exists
+  when: not item.stat.exists
+  file:
+    path: "{{ item.item | dirname }}"
+    state: directory
+  with_items: "{{ check_files['results'] }}"
+
 - name: Write the content of files
   when: item[0].item == item[1].source and not item[0].stat.exists
   copy:

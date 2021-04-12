@@ -39,7 +39,9 @@ copy_keys:
   master:
     - "{{ admin }}"
     - "{{ admin_key }}"
+    - "{{ ca_chain }}"
     - "{{ apiserver }}"
+    - "{{ apiserver_chain }}"
     - "{{ apiserver_key }}"
     - "{{ scheduler }}"
     - "{{ scheduler_key }}"

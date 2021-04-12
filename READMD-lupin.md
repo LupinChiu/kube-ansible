@@ -57,23 +57,36 @@ encryption_token -> 已修改
   1. 需將 kubernetes 設定改為優先取用私人 docker repo
      1. 需新增下列 secret 以存取私人 docker registry
 
+# 發現 api server ssl 憑證又被顯示不安全 (已解決)
+```
+  追查中
+  1. 先使用下面的 make all chain 更新所有 master
+  2. sed -i 's/tls-cert-file=\/etc\/kubernetes\/pki\/apiserver.crt/tls-cert-file=\/etc\/kubernetes\/pki\/apiserver-chain.crt/g' /etc/kubernetes/manifests/kube-apiserver.yml 
+
+  主因為 kube-apiserver.yml 裡的 --tls-cert-file 必須指定有完整 chain 路徑的 ssl 憑證 (已處理)
+  或是新增參數(--tls-ca-file)，指定他的 parent ca (此方法目前會導至整個K8S無法啟動，推測是因為使用此方法後，會自動啟動準入控制器，而我們未將準入控制器加入流程)(未)
+```
 
 # make all chain
 ```
+export cert_file_ext=crt
 cd /etc/kubernetes/pki/
-cat ca.pem intermediate/IM-CA-bundle.crt.pem > ca-chain.pem
-cat front-proxy-ca.pem intermediate/IM-CA-bundle.crt.pem > front-proxy-ca-chain.pem
-cat ./etcd/etcd-ca.pem ./intermediate/IM-CA-bundle.crt.pem > ./etcd/etcd-ca-chain.pem
+cat ca.${cert_file_ext} intermediate/K8S-IM-CA-bundle.${cert_file_ext} > ca-chain.${cert_file_ext}
+cat front-proxy-ca.${cert_file_ext} intermediate/K8S-IM-CA-bundle.${cert_file_ext} > front-proxy-ca-chain.${cert_file_ext}
+cat etcd/etcd-ca.${cert_file_ext} intermediate/K8S-IM-CA-bundle.${cert_file_ext} > etcd/etcd-ca-chain.${cert_file_ext}
 
-cat apiserver.pem ca-chain.pem > apiserver-chain.pem
-cat admin.pem ca-chain.pem > admin-chain.pem
-cat controller-manager.pem ca-chain.pem > controller-manager-chain.pem
-cat kubelet.pem ca-chain.pem > kubelet-chain.pem
-cat scheduler.pem ca-chain.pem > scheduler-chain.pem
+cat apiserver.${cert_file_ext} ca-chain.${cert_file_ext} > apiserver-chain.${cert_file_ext}
+cat admin.${cert_file_ext} ca-chain.${cert_file_ext} > admin-chain.${cert_file_ext}
+cat controller-manager.${cert_file_ext} ca-chain.${cert_file_ext} > controller-manager-chain.${cert_file_ext}
+cat kubelet.${cert_file_ext} ca-chain.${cert_file_ext} > kubelet-chain.${cert_file_ext}
+cat scheduler.${cert_file_ext} ca-chain.${cert_file_ext} > scheduler-chain.${cert_file_ext}
 
-cat front-proxy-client.pem front-proxy-ca-chain.pem > front-proxy-client-chain.pem
+cat front-proxy-client.${cert_file_ext} front-proxy-ca-chain.${cert_file_ext} > front-proxy-client-chain.${cert_file_ext}
 
-cat ./etcd/etcd.pem ./etcd/etcd-ca-chain.pem > ./etcd/etcd-chain.pem
+cat etcd/etcd.${cert_file_ext} etcd/etcd-ca-chain.${cert_file_ext} > etcd/etcd-chain.${cert_file_ext}
+
+cp -fva $(find ./ -name "*chain*") /etc/pki/ca-trust/source/anchors/
+update-ca-trust
 ```
 
 # 取得token

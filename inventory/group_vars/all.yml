@@ -28,9 +28,7 @@ enable_metric_server: false
 enable_istio: false
 
 ansible_ssh_port: 22
-ansible_ssh_private_key_file: /K8S_Ansible/sshkey/urAD-Dev
+ansible_ssh_private_key_file: ./sshkey/urAD-Dev
 ansible_ssh_user: root
 
-vip_address: 10.130.0.238
-vip_address_2: 10.130.0.237
-vip_address_3: 10.130.0.239
+enable_scp_to_http_file_server: false

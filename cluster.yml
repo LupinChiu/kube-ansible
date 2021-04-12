@@ -7,6 +7,13 @@
     - { role: cluster-path }
     - { role: cert, tags: cert }
 
+- hosts: hfs
+  become: true
+  roles:
+    - { role: cluster-default, when: enable_scp_to_http_file_server }
+    - { role: cluster-path, when: enable_scp_to_http_file_server }
+    - { role: scpFileToRemote, when: enable_scp_to_http_file_server }
+
 - hosts: kube_cluster
   gather_facts: false
   become: true

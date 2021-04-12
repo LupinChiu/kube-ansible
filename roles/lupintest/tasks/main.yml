@@ -4,8 +4,33 @@
   debug:
     msg: "HostName: {{ ansible_hostname }}  nodeName:{{ ansible_nodename }}  domainName:{{ ansible_domain }} FQDN:{{ ansible_fqdn }}"
 
-- name: Move cfssl kubernetes cert file ext name
-  when: cert_file_ext != "pem"
-  command: "mv {{ pki_dir }}/apiserver.pem {{ pki_dir }}/apiserver.{{ cert_file_ext }}"
-  register: mv_kubernetes_ssl_file
-  ignore_errors: True
+# - name: Move cfssl kubernetes cert file ext name
+#   when: cert_file_ext != "pem"
+#   command: "mv {{ pki_dir }}/apiserver.pem {{ pki_dir }}/apiserver.{{ cert_file_ext }}"
+#   register: mv_kubernetes_ssl_file
+#   ignore_errors: True
+
+- name: Copy ca certificate
+  vars:
+    files:
+    - "{{ intermediate_ca }}"
+    - "{{ intermediate_ca_bundle }}"
+    - "{{ ca }}"
+    - "{{ etcd_ca }}"
+    - "{{ front_ca }}"
+  import_role:
+    name: common/copy-files
+
+- name: mv files
+  vars:
+    savePath: "/data/pki-ssl/files/ssl-repository-4"
+    files:
+    - { file: "{{ intermediate_ca }}", target: "{{savePath}}/K8S-IM-CA.{{ cert_file_ext }}" }
+    - { file: "{{ intermediate_ca_bundle }}", target: "{{savePath}}/K8S-IM-CA-bundle.{{ cert_file_ext }}" }
+    - { file: "{{ ca }}", target: "{{savePath}}/ca.{{ cert_file_ext }}" }
+    - { file: "{{ etcd_ca }}", target: "{{savePath}}/etcd-ca.{{ cert_file_ext }}" }
+    - { file: "{{ front_ca }}", target: "{{savePath}}/front-proxy-ca.{{ cert_file_ext }}" }
+  import_role:
+    name: common/mv-files
+
+

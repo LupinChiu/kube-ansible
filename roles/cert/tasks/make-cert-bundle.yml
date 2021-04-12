@@ -1,0 +1,20 @@
+---
+
+# 有需要增加的話，可以去 chain_array 底下新增需要的 chain
+- name: Check Kubernetes SSL certificate files already exists
+  stat:
+    path: "{{ item.out_path }}"
+  with_items: "{{ chain_array }}"
+  delegate_to: "{{ groups['masters'][0] }}"
+  run_once: true
+  register: check_ssl_chain_files
+
+- name: create chain when file not exist
+  when: not item.stat.exists
+  shell: "cat {{ item.item.self }} {{ item.item.from }} > {{ item.item.out_path }}"
+  with_items: "{{ check_ssl_chain_files['results'] }}"
+  register: set_cluster_config
+  delegate_to: "{{ groups['masters'][0] }}"
+  run_once: true
+
+

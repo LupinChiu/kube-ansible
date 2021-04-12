@@ -1,0 +1,19 @@
+---
+
+- name: Check target path exists
+  stat:
+    path: "{{ item.target }}"
+  with_items: "{{ files }}"
+  register: check_target_files
+
+- name: Ensure directory already exists
+  when: not item.stat.exists
+  file:
+    path: "{{ item.item.target | dirname }}"
+    state: directory
+  with_items: "{{ check_target_files['results'] }}"
+
+- name: mv files
+  command: mv {{ item.item.file }} {{ item.item.target }}
+  with_items: "{{ check_target_files['results'] }}"
+  register: read_files

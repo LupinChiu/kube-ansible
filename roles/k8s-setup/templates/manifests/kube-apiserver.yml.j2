@@ -33,7 +33,7 @@ spec:
       - --allow-privileged=true
       - --bind-address={{ apiserver_bind_address }}
       - --secure-port={{ apiserver_secure_port }}
-      - --advertise-address={{ vip_address }}
+      - --advertise-address={{ main_vip_address }}
       - --service-cluster-ip-range={{ service_ip_range }}
       - --service-node-port-range={{ service_node_port_range }}
       - --etcd-servers={{ etcd_initial_cluster() }}
@@ -41,7 +41,7 @@ spec:
       - --etcd-certfile={{ etcd_cert }}
       - --etcd-keyfile={{ etcd_cert_key }}
       - --client-ca-file={{ ca }}
-      - --tls-cert-file={{ apiserver }}
+      - --tls-cert-file={{ apiserver_chain }}
       - --tls-private-key-file={{ apiserver_key }}
       - --kubelet-client-certificate={{ apiserver }}
       - --kubelet-client-key={{ apiserver_key }}
