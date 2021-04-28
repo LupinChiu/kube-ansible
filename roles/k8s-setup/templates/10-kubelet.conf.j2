@@ -11,12 +11,11 @@ Environment="KUBELET_EXTRA_ARGS=--node-labels=node.kubernetes.io/lupin=''"
 {% endif %}
 {% if container_runtime != 'docker' and container_runtime != 'nvidia-docker' %}
 Environment="CRI_RUNTIME_ARGS=--container-runtime=remote --container-runtime-endpoint=unix://{{ runtime_sockets['' + container_runtime] }}"
-
 {% endif %}
-
+Environment="KUBELET_CGROUP_ARGS=--cgroup-driver=cgroupfs --runtime-cgroups=/systemd/system.slice"
 
 ExecStart=
-ExecStart={{ bin_dir }}/kubelet $KUBELET_KUBECONFIG_ARGS $KUBELET_CONFIG_ARGS $KUBELET_SYSTEM_ARGS $KUBELET_EXTRA_ARGS $CRI_RUNTIME_ARGS
+ExecStart={{ bin_dir }}/kubelet $KUBELET_KUBECONFIG_ARGS $KUBELET_SYSTEM_ARGS $KUBELET_CONFIG_ARGS $KUBELET_EXTRA_ARGS $CRI_RUNTIME_ARGS $KUBELET_CGROUP_ARGS
 
 # 在 1.18 仍然為 alpha 的參數如下：
 # --network-plugin    # 限制 cri 為 docker 時使用

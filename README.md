@@ -227,6 +227,7 @@ enable_logging: false
 enable_monitoring: false
 enable_ingress: false
 enable_metric_server: true
+enable_ceph: true
 
 # monitoring grafana user/password
 monitoring_grafana_user: "admin"

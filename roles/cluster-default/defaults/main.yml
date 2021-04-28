@@ -76,7 +76,8 @@ kubeproxy_ipvs_scheduler: rr
 # 這裡需要將私有docker registry 的資訊填入(未)
 # A list of the insecure registry you might need to define
 search_registries:
-  - 'docker.io'
+  - 'grd-dev.urad.com.tw'
+#  - 'docker.io'
 #insecure_registries:
 # - "192.168.2.9:5000"
 #block_registries:

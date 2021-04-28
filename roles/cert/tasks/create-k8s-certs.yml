@@ -81,7 +81,7 @@
   copy:
     src: "{{ item.file }}"
     dest: "{{ intermediate_dir }}/{{ item.bare }}.{{ item.ext }}"
-  with_items: 
+  with_items:
     - { file: "files/K8S-IM-CA.{{ cert_file_ext }}", bare: K8S-IM-CA, ext: "{{ cert_file_ext }}" }
     - { file: "files/K8S-IM-CA-key.{{ cert_key_ext }}", bare: K8S-IM-CA-key, ext: "{{ cert_key_ext }}" }
     - { file: "files/K8S-IM-CA-bundle.{{ cert_file_ext }}", bare: K8S-IM-CA-bundle, ext: "{{ cert_file_ext }}" }
