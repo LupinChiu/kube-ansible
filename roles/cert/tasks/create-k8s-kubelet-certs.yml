@@ -23,7 +23,7 @@
     -ca={{ pki_dir }}/{{ item.item.ca }}.{{ cert_file_ext }} \
     -ca-key={{ pki_dir }}/{{ item.item.ca }}-key.{{ cert_key_ext }} \
     -config={{ cache_dir }}/{{ item.item.ca }}-config.json \
-    -hostname="{{ ansible_fqdn }}" \
+    -hostname="{{ ansible_hostname }}" \
     -profile={{ cert_info_profile }} \
     {{ pki_dir }}/{{ item.item.file }} | \
     {{ bin_dir }}/cfssljson -bare {{ pki_dir }}/{{ item.item.bare }}

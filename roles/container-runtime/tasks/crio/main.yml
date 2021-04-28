@@ -28,7 +28,7 @@
     mode: '0755'
 
 - name: Install make
-  yum:
+  ansible.builtin.package:
     name: make
     state: present
 
@@ -76,6 +76,7 @@
     state: present
     reload: yes
     sysctl_file : "/etc/sysctl.d/99-crio.conf"
+  ignore_errors: True
 
 - name: Enable and restart CRI-O engine
   systemd:

@@ -94,4 +94,5 @@ update-ca-trust
 簡易指令：
 kubectl -n kubernetes-dashboard get sa admin-user -o json | grep \"secrets\" -A 5 | grep name | awk '{print $2} ' | xargs kubectl -n kubernetes-dashboard describe secrets
 kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboard get secret | grep admin-user | awk '{print $1}')
+kubectl -n rook-ceph get secret rook-ceph-dashboard-password -o jsonpath='{.data.password}'  |  base64 --decode
 ```

@@ -6,22 +6,25 @@
   register: stop_kubelet_service
 
 - name: Stop docker systemd service
-  when: container_runtime == 'docker' or container_runtime == 'nvidia-docker'
+#  when: container_runtime == 'docker' or container_runtime == 'nvidia-docker'
   systemd: name={{ item }} state=stopped enabled=no
   with_items:
     - docker.service
     - docker.socket
   ignore_errors: True
+  become: yes
   register: stop_docker_service
 
-- name: Stop crio all container
-  when: container_runtime == 'crio'
+- name: Stop and delete crio all container
+#  when: container_runtime == 'crio'
   ansible.builtin.shell: "{{ item }}"
   with_items:
-    - "crictl stop $(crictl ps -q)"
-    - "crictl rm $(crictl ps -a -q)"
+    - "{{ bin_dir }}/crictl stop $({{ bin_dir }}/crictl ps -q)"
+    - "{{ bin_dir }}/crictl rm $({{ bin_dir }}/crictl ps -a -q)"
+    - "{{ bin_dir }}/crictl rmi $({{ bin_dir }}/crictl images -q)"
     - "rm -rf /etc/containers/registries.conf"
   ignore_errors: True
+  become: yes
   register: stop_crio_container
 
 - name: Stop crio systemd service
@@ -30,6 +33,7 @@
   with_items:
     - crio.service
   ignore_errors: True
+  become: yes
   register: stop_crio_service
 
 - name: Cleanup crio directories and binaries
@@ -77,6 +81,11 @@
     - "{{ systemd_service_dir }}/docker.service"
     - "{{ systemd_service_dir }}/docker.socket"
     - "{{ systemd_service_dir }}/containerd.service"
+
+- name: Cleanup ceph var
+  file: path="{{ item }}" state=absent
+  with_items:
+    - "/var/lib/rook/"
 
 - name: Stop containerd systemd service
   systemd: name=containerd.service state=stopped enabled=no daemon_reload=yes

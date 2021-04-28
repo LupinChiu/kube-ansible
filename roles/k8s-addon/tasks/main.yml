@@ -71,7 +71,7 @@
   command: |
     {{ bin_dir }}/kubectl --kubeconfig={{ admin_kubeconfig }} \
       apply -f {{ addon_dir }}/{{ item }}
-  with_items: "{{ addon.directories  }}"
+  with_items: "{{ addon.directories }}"
   delegate_to: "{{ groups['masters'][0] }}"
   run_once: true
   register: apply_addon

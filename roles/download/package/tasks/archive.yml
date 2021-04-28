@@ -13,6 +13,12 @@
   environment: "{{ proxy_env }}"
   register: pkg_download
 
+- name: "Install extract requirements"
+  package:
+    name: ['tar']
+  register: result
+  until: result is succeeded
+
 - name: "Extract {{ pkg.name }} file"
   unarchive:
     src: "{{ cache_dir }}/{{ pkg.file }}"

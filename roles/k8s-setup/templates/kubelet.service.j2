@@ -1,7 +1,12 @@
 [Unit]
 Description=The Kubernetes Node Agent
 Documentation=http://kubernetes.io/docs/
-Wants=docker.socket crio.service
+{% if container_runtime == 'docker' or container_runtime == 'nvidia-docker' %}
+Wants=docker.socket
+{% endif %}
+{% if container_runtime == 'crio' %}
+Wants=crio.service
+{% endif %}
 
 [Service]
 ExecStart={{ bin_dir }}/kubelet

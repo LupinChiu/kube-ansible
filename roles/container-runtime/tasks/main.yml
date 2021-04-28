@@ -18,6 +18,11 @@
   ignore_errors: True
   register: disable_firewalld
 
+- name: Install chrony, sync time
+  ansible.builtin.package:
+    name: chrony
+    state: present
+
 - when: container_runtime == 'nvidia-docker'
   raw: "nvidia-smi"
   ignore_errors: True

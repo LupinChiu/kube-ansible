@@ -13,7 +13,7 @@ spec:
   priorityClassName: system-cluster-critical
   containers:
   - name: kube-keepalived
-    image: docker.io/osixia/keepalived:2.0.20
+    image: osixia/keepalived:2.0.20
     env:
     - name: KEEPALIVED_VIRTUAL_IPS
       value: "#PYTHON2BASH:[{{ keepalived_virtual_ips }}]"

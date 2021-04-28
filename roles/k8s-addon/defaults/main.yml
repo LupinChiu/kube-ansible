@@ -1,6 +1,25 @@
 ---
 
 addons:
+  ceph:
+    name: ceph
+    directories:
+      - ceph
+    templates:
+      - ceph/crds.yaml
+      - ceph/common.yaml
+      - ceph/operator.yaml
+      - ceph/cluster.yaml
+      - ceph/dashboard-ingress-https.yaml
+    dependencies:
+      - name: rook-ceph-operator
+        kind: pod
+        namespace: rook-ceph
+        files:
+          - ceph/crds.yaml
+          - ceph/common.yaml
+          - ceph/operator.yaml
+
   kubeproxy:
     name: kube-proxy
     directories:

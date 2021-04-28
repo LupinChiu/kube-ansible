@@ -48,6 +48,6 @@
   blockinfile:
     path: /etc/hosts
     block: |
-      {{ hostvars[item].ansible_default_ipv4.address }} {{ item }}
+      {{ hostvars[item].ansible_default_ipv4.address }} {{ item }} {{ hostvars[item]['ansible_hostname'] }}
     marker: "# {mark} ANSIBLE MANAGED BLOCK {{ item }}"
   with_items: "{{ groups['masters'] }}"

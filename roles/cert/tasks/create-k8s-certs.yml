@@ -170,11 +170,16 @@
   run_once: true
   register: check_sa_key
 
+- name: Install openssl
+  ansible.builtin.package:
+    name: openssl
+    state: present
+
 - name: Create service account private and public key
   when: not check_sa_key.stat.exists
   command: "{{ item }}"
   with_items:
-    - "openssl genrsa -out {{ pki_dir}}/sa.key 2048"
+    - "openssl genrsa -out {{ pki_dir }}/sa.key 2048"
     - "openssl rsa -in {{ pki_dir }}/sa.key -pubout -out {{ pki_dir }}/sa.pub"
   delegate_to: "{{ groups['masters'][0] }}"
   run_once: true
